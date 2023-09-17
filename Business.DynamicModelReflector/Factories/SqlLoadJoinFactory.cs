@@ -27,10 +27,11 @@ namespace Business.DynamicModelReflector.Factories
         #endregion
 
         #region Public Methods
-        public ILoadJoinFactory<TModel> LeftJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new()
+        public ILoadJoinFactory<TModel> LeftJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new()
         {
             try
             {
+                _context.StringBuilder.Append(_context.QueryBuilder.BuildLeftJoinConditions(joinCondition));
                 return new SqlLoadJoinFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -40,10 +41,11 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public ILoadJoinFactory<TModel> RightJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new()
+        public ILoadJoinFactory<TModel> RightJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new()
         {
             try
             {
+                _context.StringBuilder.Append(_context.QueryBuilder.BuildRightJoinConditions(joinCondition));
                 return new SqlLoadJoinFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -53,10 +55,11 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public ILoadJoinFactory<TModel> InnerJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new()
+        public ILoadJoinFactory<TModel> InnerJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new()
         {
             try
             {
+                _context.StringBuilder.Append(_context.QueryBuilder.BuildInnerJoinConditions(joinCondition));
                 return new SqlLoadJoinFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -80,7 +83,7 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public IGroupByFactory<TModel> GroupBy(Expression<Func<TModel, object>> groupByCondition)
+        public IGroupByFactory<TModel> OrderBy(Func<TModel, object> keySelector, OrderByMenu orderByMenu)
         {
             try
             {
@@ -93,7 +96,7 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public IExecutable<TModel> OrderBy(Expression<Func<TModel, OrderByMenu>> orderByCondition)
+        public IExecutable<TModel> OrderBy(params (Func<TModel, object> orderByProperty, OrderByMenu orderByMenu)[] propertiesToOrderBy)
         {
             try
             {

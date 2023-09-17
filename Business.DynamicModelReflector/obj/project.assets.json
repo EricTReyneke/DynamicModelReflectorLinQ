@@ -939,11 +939,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\DynamicModelReflectorLinQ\\Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj",
+      "projectUniqueName": "C:\\DynamicDataModelReflector\\Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj",
       "projectName": "Business.DynamicModelReflector",
-      "projectPath": "C:\\DynamicModelReflectorLinQ\\Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj",
+      "projectPath": "C:\\DynamicDataModelReflector\\Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj",
       "packagesPath": "C:\\Users\\eric2\\.nuget\\packages\\",
-      "outputPath": "C:\\DynamicModelReflectorLinQ\\Business.DynamicModelReflector\\obj\\",
+      "outputPath": "C:\\DynamicDataModelReflector\\Business.DynamicModelReflector\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -965,8 +965,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\DynamicModelReflectorLinQ\\Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj": {
-              "projectPath": "C:\\DynamicModelReflectorLinQ\\Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj"
+            "C:\\DynamicDataModelReflector\\Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj": {
+              "projectPath": "C:\\DynamicDataModelReflector\\Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj"
             }
           }
         }

@@ -15,9 +15,9 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <summary>
         /// Builds OrderBy condition.
         /// </summary>
-        /// <param name="orderByCondition">OrderBy Expression.</param>
+        /// <param name="propertiesToOrderBy">Specified properties to order by.</param>
         /// <returns>IExecutable which allows for execution of Query.</returns>
-        IExecutable<TModel> OrderBy(Expression<Func<TModel, OrderByMenu>> orderByCondition);
+        IExecutable<TModel> OrderBy(params (Func<TModel, object> orderByProperty, OrderByMenu orderByMenu)[] propertiesToOrderBy);
 
         /// <summary>
         /// Executes query.

@@ -1,5 +1,6 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
 using System.Linq.Expressions;
+using System.Numerics;
 
 namespace Business.DynamicModelReflector.Interfaces
 {
@@ -12,7 +13,7 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <typeparam name="TModelRight">Right Poco Model.</typeparam>
         /// <param name="joinCondition">LeftJoin Expression.</param>
         /// <returns>ILoadJoinFactory for query manipulation.</returns>
-        ILoadJoinFactory<TModel> LeftJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        ILoadJoinFactory<TModel> LeftJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
 
         /// <summary>
         /// Builds RightJoin condiotions.
@@ -21,7 +22,7 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <typeparam name="TModelRight">Right Poco Model.</typeparam>
         /// <param name="joinCondition">RightJoin Expression.</param>
         /// <returns>ILoadJoinFactory for query manipulation.</returns>
-        ILoadJoinFactory<TModel> RightJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        ILoadJoinFactory<TModel> RightJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
 
         /// <summary>
         /// Builds InnerJoin condiotions.
@@ -30,7 +31,7 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <typeparam name="TModelRight">Right Poco Model.</typeparam>
         /// <param name="joinCondition">InnerJoin Expression.</param>
         /// <returns>ILoadJoinFactory for query manipulation.</returns>
-        ILoadJoinFactory<TModel> InnerJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        ILoadJoinFactory<TModel> InnerJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
 
         /// <summary>
         /// Builds the Where Conditions.
@@ -49,9 +50,9 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <summary>
         /// Builds OrderBy condition.
         /// </summary>
-        /// <param name="orderByCondition">OrderBy Expression.</param>
+        /// <param name="propertiesToOrderBy">Specified properties to order by.</param>
         /// <returns>IExecutable which allows for execution of Query.</returns>
-        IExecutable<TModel> OrderBy(Expression<Func<TModel, OrderByMenu>> orderByCondition);
+        IExecutable<TModel> OrderBy(params (Func<TModel, object> orderByProperty, OrderByMenu orderByMenu)[] propertiesToOrderBy);
 
         /// <summary>
         /// Executes query.

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qLVEt2jnflz8pYOp2eNB/tK0n4/lYYNYqRjHuztd8F7K+b8AVkxDKPU1DuHRjHH9J0Okwz4lt/hfVCdwUTP0bg==",
+  "dgSpecHash": "wCeBV5LNa1/m0yF5vyZUx4L5plO1lMcqCalXvtTeidWMJ6bqepwG7hu87T0Y3gjRwXtcR4tgJFqrNSCkhLxJQQ==",
   "success": true,
-  "projectFilePath": "C:\\DynamicModelReflectorLinQ\\Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj",
+  "projectFilePath": "C:\\DynamicDataModelReflector\\Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\eric2\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\eric2\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",

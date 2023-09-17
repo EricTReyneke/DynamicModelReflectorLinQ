@@ -27,14 +27,14 @@ namespace Business.DynamicModelReflector.QueryBuilders
         #endregion
 
         #region Public Methods
-        public string BuildWhereConditions<TModel>(Expression<Func<TModel, bool>> expression)
+        public string BuildWhereConditions<TModel>(Expression<Func<TModel, bool>> whereCondition)
         {
             try
             {
                 _condition.Clear();
                 _parameters.Clear();
                 _propertyParameterName = string.Empty;
-                Visit(expression);
+                Visit(whereCondition);
                 return _condition.ToString();
             }
             catch (Exception ex)
@@ -43,6 +43,22 @@ namespace Business.DynamicModelReflector.QueryBuilders
                 throw;
             }
         }
+
+        public string BuildLeftJoinConditions<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> leftJoinCondition)
+            where TModelLeft : class, new() where TModelRight : class, new() =>
+                $"Left Join {typeof(TModelRight).Name} On {typeof(TModelLeft).Name}.{((MemberExpression)((BinaryExpression)leftJoinCondition.Body).Left).Member.Name}" +
+                    $" = {typeof(TModelRight).Name}.{((MemberExpression)((BinaryExpression)leftJoinCondition.Body).Right).Member.Name}";
+
+        public string BuildRightJoinConditions<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> rightJoinCondition)
+            where TModelLeft : class, new() where TModelRight : class, new() =>
+                $"Right Join {typeof(TModelRight).Name} On {typeof(TModelLeft).Name}.{((MemberExpression)((BinaryExpression)rightJoinCondition.Body).Left).Member.Name}" +
+                    $" = {typeof(TModelRight).Name}.{((MemberExpression)((BinaryExpression)rightJoinCondition.Body).Right).Member.Name}";
+
+        public string BuildInnerJoinConditions<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> innerJoinCondition)
+            where TModelLeft : class, new() where TModelRight : class, new() =>
+                $"Inner Join {typeof(TModelRight).Name} On {typeof(TModelLeft).Name}.{((MemberExpression)((BinaryExpression)innerJoinCondition.Body).Left).Member.Name}" +
+                    $" = {typeof(TModelRight).Name}.{((MemberExpression)((BinaryExpression)innerJoinCondition.Body).Right).Member.Name}";
+
 
         public string BuildUpdateSetConditions<TModel>(TModel model) where TModel : class, new()
         {
@@ -155,6 +171,12 @@ namespace Business.DynamicModelReflector.QueryBuilders
             return base.VisitConstant(node);
         }
 
+        /// <summary>
+        /// Generates SqlParameters and adds them to a list of SqlParameters.
+        /// </summary>
+        /// <typeparam name="TModel">Generic Poco.</typeparam>
+        /// <param name="propertyInfo">Specified Property info.</param>
+        /// <param name="model">Poco object.</param>
         private void GenerateSqlParameter<TModel>(PropertyInfo propertyInfo, TModel model) where TModel : class, new()
         {
             object value = propertyInfo.GetValue(model) ?? DBNull.Value;

@@ -3,7 +3,6 @@ using Business.DynamicModelReflector.DataOperations;
 using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.ModelReflectors;
 using Business.DynamicModelReflector.QueryBuilders;
-using System.Collections.Generic;
 
 namespace DynamicModelGeneratorLinq
 {
@@ -23,9 +22,9 @@ namespace DynamicModelGeneratorLinq
             //    new Category(){ Id = 9, Name = "C9", Level = 3, NumberOfPlayers = 5, Date = DateTime.Now }
             //};
 
-            IEnumerable<Category> category = new List<Category>();
+            IEnumerable<Players> players = new List<Players>();
 
-            sqlModelReflector.Create(category);
+            sqlModelReflector.Load(players).OrderBy((p => p.Team_Id, OrderByMenu.Asc),(p => p.Player_Id, OrderByMenu.Desc));
         }
     }
 }

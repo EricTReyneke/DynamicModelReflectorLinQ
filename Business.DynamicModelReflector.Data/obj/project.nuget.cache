@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fUy2DeXI6KuwqOa/4CDMXaEea++pgaWq3cQnM605mwZiWqf3kSUv/cmUlKgRScQXXE2iuJ8pnBQQjPVXlyMOPw==",
+  "dgSpecHash": "WtSv9WzZkRqApaVA0ictWP3zXimTsP5bemdMyMHFQ5Bl4dtcTz3XRC3ZIQGSTqQrioyce/Ie5BRUhVK8WQ3DKw==",
   "success": true,
-  "projectFilePath": "C:\\DynamicModelReflectorLinQ\\Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj",
+  "projectFilePath": "C:\\DynamicDataModelReflector\\Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

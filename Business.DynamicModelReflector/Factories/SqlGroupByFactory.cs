@@ -27,7 +27,7 @@ namespace Business.DynamicModelReflector.Factories
         #endregion
 
         #region Public Methods
-        public IExecutable<TModel> OrderBy(Expression<Func<TModel, OrderByMenu >> orderByCondition)
+        public IExecutable<TModel> OrderBy(params (Func<TModel, object> orderByProperty, OrderByMenu orderByMenu)[] propertiesToOrderBy)
         {
             try
             {

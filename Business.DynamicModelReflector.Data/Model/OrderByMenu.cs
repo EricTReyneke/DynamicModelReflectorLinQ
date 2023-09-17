@@ -3,6 +3,6 @@
     public enum OrderByMenu
     {
         Desc,
-        Asce
+        Asc
     }
 }
