@@ -1,0 +1,22 @@
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\bin\Debug\net6.0\Business.DynamicModelReflector.Data.deps.json
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\bin\Debug\net6.0\Business.DynamicModelReflector.Data.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\bin\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.AssemblyInfoInputs.cache
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.AssemblyInfo.cs
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.csproj.CoreCompileInputs.cache
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\refint\Business.DynamicModelReflector.Data.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\ref\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\bin\Debug\net6.0\Business.DynamicModelReflector.Data.deps.json
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\bin\Debug\net6.0\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\bin\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.AssemblyInfoInputs.cache
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.AssemblyInfo.cs
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.csproj.CoreCompileInputs.cache
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\refint\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
+C:\DynamicModelReflectorLinQ\Business.DynamicModelReflector.Data\obj\Debug\net6.0\ref\Business.DynamicModelReflector.Data.dll

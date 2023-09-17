@@ -1,0 +1,76 @@
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.exe
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.dll.config
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.deps.json
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.runtimeconfig.json
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.pdb
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Data.SqlClient.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Drawing.Common.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Security.Permissions.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Windows.Extensions.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Business.DynamicModelReflector.Data.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Business.DynamicModelReflector.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Business.DynamicModelReflector.pdb
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.AssemblyReference.cache
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.AssemblyInfoInputs.cache
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.AssemblyInfo.cs
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.CoreCompileInputs.cache
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.CopyComplete
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\refint\DynamicModelReflectorLinQ.dll
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.pdb
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.genruntimeconfig.cache
+C:\Users\Francois-Dean\Documents\Visual Studio Home Projects\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\ref\DynamicModelReflectorLinQ.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.exe
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.dll.config
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.deps.json
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.runtimeconfig.json
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\DynamicModelReflectorLinQ.pdb
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Data.SqlClient.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Drawing.Common.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Security.Permissions.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\System.Windows.Extensions.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Business.DynamicModelReflector.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Business.DynamicModelReflector.pdb
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.AssemblyReference.cache
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.GeneratedMSBuildEditorConfig.editorconfig
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.AssemblyInfoInputs.cache
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.AssemblyInfo.cs
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.CoreCompileInputs.cache
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.CopyComplete
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\refint\DynamicModelReflectorLinQ.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.pdb
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.genruntimeconfig.cache
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\obj\Debug\net6.0\ref\DynamicModelReflectorLinQ.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\DynamicModelReflectorLinQ\DynamicModelReflectorLinQ\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
