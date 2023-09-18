@@ -10,14 +10,14 @@ namespace Business.DynamicModelReflector.Interfaces
         /// </summary>
         /// <param name="groupByCondition">GroupBy Expression.</param>
         /// <returns>IGroupByFactory for query manipulation.</returns>
-        IGroupByFactory<TModel> GroupBy(Expression<Func<TModel, object>> groupByCondition);
+        IGroupByFactory<TModel> GroupBy(params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition);
 
         /// <summary>
         /// Builds OrderBy condition.
         /// </summary>
-        /// <param name="propertiesToOrderBy">Specified properties to order by.</param>
+        /// <param name="orderByConditions">Specified properties to order by.</param>
         /// <returns>IExecutable which allows for execution of Query.</returns>
-        IExecutable<TModel> OrderBy(params (Func<TModel, object> orderByProperty, OrderByMenu orderByMenu)[] propertiesToOrderBy);
+        IExecutable<TModel> OrderBy(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByConditions);
 
         /// <summary>
         /// Executes query.

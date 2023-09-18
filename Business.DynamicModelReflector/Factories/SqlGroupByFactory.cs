@@ -27,10 +27,11 @@ namespace Business.DynamicModelReflector.Factories
         #endregion
 
         #region Public Methods
-        public IExecutable<TModel> OrderBy(params (Func<TModel, object> orderByProperty, OrderByMenu orderByMenu)[] propertiesToOrderBy)
+        public IExecutable<TModel> OrderBy(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByConditions)
         {
             try
             {
+                _context.StringBuilder.Append(_context.QueryBuilder.BuildOrderByConditions(orderByConditions));
                 return new SqlExecutable<TModel>(_context);
             }
             catch (Exception ex)

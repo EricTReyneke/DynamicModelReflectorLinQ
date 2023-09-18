@@ -27,10 +27,11 @@ namespace Business.DynamicModelReflector.Factories
         #endregion
 
         #region Public Methods
-        public IGroupByFactory<TModel> GroupBy(Expression<Func<TModel, object>> groupByCondition)
+        public IGroupByFactory<TModel> GroupBy(params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition)
         {
             try
             {
+                _context.QueryBuilder.BuildGroupByConditions(_context.StringBuilder, groupByCondition);
                 return new SqlGroupByFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -40,11 +41,11 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public IExecutable<TModel> OrderBy(params (Func<TModel, object> orderByProperty, OrderByMenu orderByMenu)[] propertiesToOrderBy)
+        public IExecutable<TModel> OrderBy(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByConditions)
         {
             try
             {
-
+                _context.StringBuilder.Append(_context.QueryBuilder.BuildOrderByConditions(orderByConditions));
                 return new SqlExecutable<TModel>(_context);
             }
             catch (Exception ex)

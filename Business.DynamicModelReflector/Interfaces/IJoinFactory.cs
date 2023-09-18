@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace Business.DynamicModelReflector.Interfaces
 {
-    public interface ILoadJoinFactory<TModel> where TModel : class, new()
+    public interface IJoinFactory<TModel> where TModel : class, new()
     {
         /// <summary>
         /// Builds LeftJoin condiotions.
@@ -13,7 +13,7 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <typeparam name="TModelRight">Right Poco Model.</typeparam>
         /// <param name="joinCondition">LeftJoin Expression.</param>
         /// <returns>ILoadJoinFactory for query manipulation.</returns>
-        ILoadJoinFactory<TModel> LeftJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        IJoinFactory<TModel> LeftJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
 
         /// <summary>
         /// Builds RightJoin condiotions.
@@ -22,7 +22,7 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <typeparam name="TModelRight">Right Poco Model.</typeparam>
         /// <param name="joinCondition">RightJoin Expression.</param>
         /// <returns>ILoadJoinFactory for query manipulation.</returns>
-        ILoadJoinFactory<TModel> RightJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        IJoinFactory<TModel> RightJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
 
         /// <summary>
         /// Builds InnerJoin condiotions.
@@ -31,7 +31,7 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <typeparam name="TModelRight">Right Poco Model.</typeparam>
         /// <param name="joinCondition">InnerJoin Expression.</param>
         /// <returns>ILoadJoinFactory for query manipulation.</returns>
-        ILoadJoinFactory<TModel> InnerJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        IJoinFactory<TModel> InnerJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
 
         /// <summary>
         /// Builds the Where Conditions.
@@ -45,14 +45,14 @@ namespace Business.DynamicModelReflector.Interfaces
         /// </summary>
         /// <param name="groupByCondition">GroupBy Expression.</param>
         /// <returns>IGroupByFactory for query manipulation.</returns>
-        IGroupByFactory<TModel> GroupBy(Expression<Func<TModel, object>> groupByCondition);
+        IGroupByFactory<TModel> GroupBy(params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition);
 
         /// <summary>
         /// Builds OrderBy condition.
         /// </summary>
-        /// <param name="propertiesToOrderBy">Specified properties to order by.</param>
+        /// <param name="orderByConditions">Specified properties to order by.</param>
         /// <returns>IExecutable which allows for execution of Query.</returns>
-        IExecutable<TModel> OrderBy(params (Func<TModel, object> orderByProperty, OrderByMenu orderByMenu)[] propertiesToOrderBy);
+        IExecutable<TModel> OrderBy(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByConditions);
 
         /// <summary>
         /// Executes query.

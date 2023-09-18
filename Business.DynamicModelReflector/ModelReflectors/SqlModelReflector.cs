@@ -3,6 +3,7 @@ using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Factories;
 using Business.DynamicModelReflector.Interfaces;
 using System.Collections;
+using System.Reflection;
 using System.Text;
 
 namespace Business.DynamicModelReflector.ModelReflectors
@@ -35,7 +36,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         #endregion
 
         #region Public Methods
-        public ILoadJoinFactory<TModel> Load<TModel>(TModel model) where TModel : class, new()
+        public ILoadFactory<TModel> Load<TModel>(TModel model) where TModel : class, new()
         {
             try
             {
@@ -44,8 +45,8 @@ namespace Business.DynamicModelReflector.ModelReflectors
 
                 StringBuilder buildLoadQuery = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
-                buildLoadQuery.Append($"Select * From {typeof(TModel).Name} ");
-                return new SqlLoadJoinFactory<TModel>(sqlContext);
+                buildLoadQuery.Append($"Select{AddAllColumnsIntoSelect<TModel>()} \nFrom {typeof(TModel).Name} ");
+                return new SqlLoadFactory<TModel>(sqlContext);
             }
             catch(Exception ex)
             {
@@ -54,15 +55,15 @@ namespace Business.DynamicModelReflector.ModelReflectors
             }
         }
 
-        public ILoadJoinFactory<TModel> Load<TModel>(IEnumerable<TModel> models) where TModel : class, new()
+        public ILoadFactory<TModel> Load<TModel>(IEnumerable<TModel> models) where TModel : class, new()
         {
             try
             {
                 StringBuilder buildLoadQuery = new();
                 TModel model = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, models);
-                buildLoadQuery.Append($"Select * From {model.GetType().Name} ");
-                return new SqlLoadJoinFactory<TModel>(sqlContext);
+                buildLoadQuery.Append($"Select{AddAllColumnsIntoSelect<TModel>()} \nFrom {model.GetType().Name} ");
+                return new SqlLoadFactory<TModel>(sqlContext);
             }
             catch (Exception ex)
             {
@@ -93,7 +94,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
             {
                 StringBuilder buildLoadQuery = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
-                buildLoadQuery.Append($"Update {typeof(TModel).Name} Set{_queryBuilder.BuildUpdateSetConditions(model)}");
+                buildLoadQuery.Append($"Update {typeof(TModel).Name} {_queryBuilder.BuildUpdateSetConditions(model)}");
                 return new SqlDeleteUpdateFactory<TModel>(sqlContext);
             }
             catch (Exception ex)
@@ -182,6 +183,16 @@ namespace Business.DynamicModelReflector.ModelReflectors
                 DataOperations = _dataOperations,
                 StringBuilder = stringBuilder
             };
+        }
+
+        private string AddAllColumnsIntoSelect<TModel>() where TModel : class, new()
+        {
+            StringBuilder stringBuilder = new();
+
+            foreach (PropertyInfo propertyInfo in typeof(TModel).GetProperties())
+                stringBuilder.Append($" {propertyInfo.Name},");
+
+            return stringBuilder.ToString().TrimEnd(',');
         }
         #endregion
     }

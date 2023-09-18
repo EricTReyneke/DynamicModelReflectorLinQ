@@ -4,7 +4,7 @@
     {
         Count,
         Sum,
-        AVG,
+        Avg,
         Min,
         Max,
         String_Agg,

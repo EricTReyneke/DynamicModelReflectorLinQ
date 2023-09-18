@@ -1,10 +1,19 @@
-﻿using System.Data.SqlClient;
+﻿using Business.DynamicModelReflector.Data.Model;
+using System.Data.SqlClient;
 using System.Linq.Expressions;
+using System.Text;
 
 namespace Business.DynamicModelReflector.Interfaces
 {
     public interface IQueryBuilder
     {
+        /// <summary>
+        /// Builds the columns which will be selected in query.
+        /// </summary>
+        /// <param name="selectCondition">columns to select.</param>
+        /// <returns>ILoadJoinFactory for query manipulation.</returns>
+        string BuildSelectConditions<TModel>(params Expression<Func<TModel, object>>[] selectCondition);
+
         /// <summary>
         /// Builds Where Conditions.
         /// </summary>
@@ -59,5 +68,9 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <typeparam name="TModel">Generic POCO Model.</typeparam>
         /// <param name="model">Poco Model Object.</param>
         string BuildInsertConditions<TModel>(TModel model) where TModel : class, new();
+
+        void BuildGroupByConditions<TModel>(StringBuilder QueryStatment, params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition) where TModel : class, new();
+
+        string BuildOrderByConditions<TModel>(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByCondition) where TModel : class, new();
     }
 }
