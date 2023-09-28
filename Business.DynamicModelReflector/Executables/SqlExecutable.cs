@@ -42,7 +42,7 @@ namespace Business.DynamicModelReflector.Executables
                     ExecuteInsertQuery();
                     break;
                 default:
-                    throw new Exception($"The query: \"{_context.StringBuilder.ToString()}\" is not supported.");
+                    throw new Exception($"The query: \"{_context.StringBuilder}\" is not supported.");
             }
         }
         #endregion
@@ -96,7 +96,12 @@ namespace Business.DynamicModelReflector.Executables
         {
             foreach (DataRow rowData in tableData.Rows)
                 foreach (PropertyInfo propertyInfo in typeof(TModel).GetProperties())
+                {
+                    if (!tableData.Columns.Contains(propertyInfo.Name))
+                        continue;
+
                     propertyInfo.SetValue(setDataModel, TypeConversion(rowData[propertyInfo.Name].ToString(), propertyInfo.PropertyType));
+                }
         }
 
         /// <summary>
@@ -111,11 +116,16 @@ namespace Business.DynamicModelReflector.Executables
             {
                 TModel setDataModel = new();
                 foreach (PropertyInfo propertyInfo in typeof(TModel).GetProperties())
-                    propertyInfo.SetValue(setDataModel, TypeConversion(rowData[propertyInfo.Name].ToString(), propertyInfo.PropertyType));
+                {
+                    if (!tableData.Columns.Contains(propertyInfo.Name))
+                        continue;
 
+                    propertyInfo.SetValue(setDataModel, TypeConversion(rowData[propertyInfo.Name].ToString(), propertyInfo.PropertyType));
+                }
                 dataModels.Add(setDataModel);
             }
         }
+
 
         /// <summary>
         /// Converts the string value into the propertyType provided.

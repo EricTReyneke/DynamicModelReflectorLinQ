@@ -2,7 +2,6 @@
 using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Interfaces;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Business.DynamicModelReflector.Factories
 {
@@ -27,10 +26,26 @@ namespace Business.DynamicModelReflector.Factories
         #endregion
 
         #region Public Methods
-        public IJoinFactory<TModel> LeftJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new()
+        public IJoinFactory<TModel> Select(params Expression<Func<TModel, object>>[] selectCondition)
         {
             try
             {
+                _context.StringBuilder.Clear();
+                _context.StringBuilder.Append(_context.QueryBuilder.BuildSelectConditions(selectCondition));
+                return new SqlJoinFactory<TModel>(_context);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Message: {ex.Message}\nInner Exception: {ex.InnerException}\nStack Trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public IJoinFactory<TModel> LeftJoin(Expression<Func<TModel, object>> joinCondition)
+        {
+            try
+            {
+                string queryStatment = string.Join("", _context.StringBuilder.ToString().Split("From"));
                 _context.StringBuilder.Append(_context.QueryBuilder.BuildLeftJoinConditions(joinCondition));
                 return new SqlJoinFactory<TModel>(_context);
             }
@@ -41,7 +56,7 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public IJoinFactory<TModel> RightJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new()
+        public IJoinFactory<TModel> RightJoin(Expression<Func<TModel, object>> joinCondition)
         {
             try
             {
@@ -55,7 +70,7 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public IJoinFactory<TModel> InnerJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new()
+        public IJoinFactory<TModel> InnerJoin(Expression<Func<TModel, object>> joinCondition)
         {
             try
             {
@@ -73,7 +88,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                _context.StringBuilder.Append($"Where {_context.QueryBuilder.BuildWhereConditions(whereCondition)}");
+                _context.StringBuilder.Append($" \nWhere {_context.QueryBuilder.BuildWhereConditions(whereCondition)}");
                 return new SqlWhereFactory<TModel>(_context);
             }
             catch (Exception ex)

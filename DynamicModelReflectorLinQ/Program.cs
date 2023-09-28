@@ -26,9 +26,12 @@ namespace DynamicModelGeneratorLinq
 
             //sqlModelReflector.Load(players).Select(players => players.Player_Id, players => players.Player_Name);
 
-            sqlModelReflector.Load(players)
-                .GroupBy((players => players.Team_Id, AggregateFunctionMenu.Avg), (players => players.Player_Id, AggregateFunctionMenu.Max))
-                .OrderBy((p => p.Team_Id, OrderByMenu.Asc), (p => p.Player_Id, OrderByMenu.Desc))
+            sqlModelReflector
+                .Load(players)
+                .Select(players => players.Player_Id, players => players.Player_Name, players => players.Team_Id)
+                .InnerJoin(players => players.Team_Id)
+                .Where(players => players.Player_Name == "Jane")
+                .OrderBy((players => players.Player_Id, OrderByMenu.Desc))
                 .Execute();
         }
     }

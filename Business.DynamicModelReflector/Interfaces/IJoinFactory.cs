@@ -7,31 +7,17 @@ namespace Business.DynamicModelReflector.Interfaces
     public interface IJoinFactory<TModel> where TModel : class, new()
     {
         /// <summary>
-        /// Builds LeftJoin condiotions.
+        /// Builds the columns which will be selected in query.
         /// </summary>
-        /// <typeparam name="TModelLeft">Left Poco Model.</typeparam>
-        /// <typeparam name="TModelRight">Right Poco Model.</typeparam>
-        /// <param name="joinCondition">LeftJoin Expression.</param>
+        /// <param name="selectCondition">columns to select.</param>
         /// <returns>ILoadJoinFactory for query manipulation.</returns>
-        IJoinFactory<TModel> LeftJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        IJoinFactory<TModel> Select(params Expression<Func<TModel, object>>[] selectCondition);
 
-        /// <summary>
-        /// Builds RightJoin condiotions.
-        /// </summary>
-        /// <typeparam name="TModelLeft">Left Poco Model.</typeparam>
-        /// <typeparam name="TModelRight">Right Poco Model.</typeparam>
-        /// <param name="joinCondition">RightJoin Expression.</param>
-        /// <returns>ILoadJoinFactory for query manipulation.</returns>
-        IJoinFactory<TModel> RightJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        IJoinFactory<TModel> LeftJoin(Expression<Func<TModel, object>> joinCondition);
 
-        /// <summary>
-        /// Builds InnerJoin condiotions.
-        /// </summary>
-        /// <typeparam name="TModelLeft">Left Poco Model.</typeparam>
-        /// <typeparam name="TModelRight">Right Poco Model.</typeparam>
-        /// <param name="joinCondition">InnerJoin Expression.</param>
-        /// <returns>ILoadJoinFactory for query manipulation.</returns>
-        IJoinFactory<TModel> InnerJoin<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> joinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        IJoinFactory<TModel> RightJoin(Expression<Func<TModel, object>> joinCondition);
+
+        IJoinFactory<TModel> InnerJoin(Expression<Func<TModel, object>> joinCondition);
 
         /// <summary>
         /// Builds the Where Conditions.

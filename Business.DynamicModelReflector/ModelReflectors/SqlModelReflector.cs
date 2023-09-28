@@ -36,7 +36,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         #endregion
 
         #region Public Methods
-        public ILoadFactory<TModel> Load<TModel>(TModel model) where TModel : class, new()
+        public IJoinFactory<TModel> Load<TModel>(TModel model) where TModel : class, new()
         {
             try
             {
@@ -45,8 +45,8 @@ namespace Business.DynamicModelReflector.ModelReflectors
 
                 StringBuilder buildLoadQuery = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
-                buildLoadQuery.Append($"Select{AddAllColumnsIntoSelect<TModel>()} \nFrom {typeof(TModel).Name} ");
-                return new SqlLoadFactory<TModel>(sqlContext);
+                buildLoadQuery.Append($"Select{_queryBuilder.AddAllColumnsIntoSelect<TModel>()} \nFrom {typeof(TModel).Name} ");
+                return new SqlJoinFactory<TModel>(sqlContext);
             }
             catch(Exception ex)
             {
@@ -55,15 +55,15 @@ namespace Business.DynamicModelReflector.ModelReflectors
             }
         }
 
-        public ILoadFactory<TModel> Load<TModel>(IEnumerable<TModel> models) where TModel : class, new()
+        public IJoinFactory<TModel> Load<TModel>(IEnumerable<TModel> models) where TModel : class, new()
         {
             try
             {
                 StringBuilder buildLoadQuery = new();
                 TModel model = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, models);
-                buildLoadQuery.Append($"Select{AddAllColumnsIntoSelect<TModel>()} \nFrom {model.GetType().Name} ");
-                return new SqlLoadFactory<TModel>(sqlContext);
+                buildLoadQuery.Append($"Select{_queryBuilder.AddAllColumnsIntoSelect<TModel>()} \nFrom {model.GetType().Name} ");
+                return new SqlJoinFactory<TModel>(sqlContext);
             }
             catch (Exception ex)
             {
@@ -183,16 +183,6 @@ namespace Business.DynamicModelReflector.ModelReflectors
                 DataOperations = _dataOperations,
                 StringBuilder = stringBuilder
             };
-        }
-
-        private string AddAllColumnsIntoSelect<TModel>() where TModel : class, new()
-        {
-            StringBuilder stringBuilder = new();
-
-            foreach (PropertyInfo propertyInfo in typeof(TModel).GetProperties())
-                stringBuilder.Append($" {propertyInfo.Name},");
-
-            return stringBuilder.ToString().TrimEnd(',');
         }
         #endregion
     }

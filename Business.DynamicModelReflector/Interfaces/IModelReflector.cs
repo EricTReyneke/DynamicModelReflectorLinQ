@@ -8,7 +8,7 @@
         /// <typeparam name="TModel">Generic Poco Mdoel.</typeparam>
         /// <param name="model">Poco model object.</param>
         /// <returns>Load facotry which allowes for diffrent query operation</returns>
-        ILoadFactory<TModel> Load<TModel>(TModel model) where TModel : class, new();
+        IJoinFactory<TModel> Load<TModel>(TModel model) where TModel : class, new();
 
         /// <summary>
         /// Loads Data into Poco objects.
@@ -16,7 +16,7 @@
         /// <typeparam name="TModel">Generic Poco Mdoel.</typeparam>
         /// <param name="models">IEnnumerable Poco model objects.</param>
         /// <returns>Load facotry which allowes for diffrent query operation</returns>
-        ILoadFactory<TModel> Load<TModel>(IEnumerable<TModel> models) where TModel : class, new();
+        IJoinFactory<TModel> Load<TModel>(IEnumerable<TModel> models) where TModel : class, new();
 
         /// <summary>
         /// Deletes Data out of the database from the name of the Poco Model.

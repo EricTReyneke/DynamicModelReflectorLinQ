@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.Extensions.Configuration;
-using System.Reflection;
 
 namespace Business.DynamicModelReflector.DataOperations
 {
@@ -71,7 +70,7 @@ namespace Business.DynamicModelReflector.DataOperations
             {
                 ExcuteQuery(deleteStatement, queryBuilder);
             }
-            catch (SqlException sqlEx)
+            catch
             {
                 throw;
             }
@@ -83,7 +82,7 @@ namespace Business.DynamicModelReflector.DataOperations
             {
                 ExcuteQuery(insertStatement, queryBuilder);
             }
-            catch (SqlException sqlEx)
+            catch
             {
                 throw;
             }
@@ -95,7 +94,7 @@ namespace Business.DynamicModelReflector.DataOperations
             {
                 ExcuteQuery(updateStatement, queryBuilder);
             }
-            catch (SqlException sqlEx)
+            catch
             {
                 throw;
             }
@@ -111,13 +110,15 @@ namespace Business.DynamicModelReflector.DataOperations
         private void ExcuteQuery(string sqlStatment, IQueryBuilder queryBuilder)
         {
             using (SqlConnection sqlConnection = CreateConnection())
-            using (SqlCommand sqlCommand = new(sqlStatment, sqlConnection))
             {
-                List<SqlParameter> conditionalParameters = CloneConditionalParameters(queryBuilder.GetParameters());
-                if (conditionalParameters != null)
-                    sqlCommand.Parameters.AddRange(conditionalParameters.ToArray());
+                using (SqlCommand sqlCommand = new(sqlStatment, sqlConnection))
+                {
+                    List<SqlParameter> conditionalParameters = CloneConditionalParameters(queryBuilder.GetParameters());
+                    if (conditionalParameters != null)
+                        sqlCommand.Parameters.AddRange(conditionalParameters.ToArray());
 
-                sqlCommand.ExecuteNonQuery();
+                    sqlCommand.ExecuteNonQuery();
+                }
             }
         }
 

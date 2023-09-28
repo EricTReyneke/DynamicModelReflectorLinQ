@@ -1,11 +1,12 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
 using Business.DynamicModelReflector.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 
 namespace Business.DynamicModelReflector.QueryBuilders
 {
@@ -15,43 +16,69 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// <summary>
         /// Condition StringBuilder.
         /// </summary>
-        private StringBuilder _condition = new();
+        StringBuilder _condition = new();
 
         /// <summary>
         /// Parameters of the conditions added to the query.
         /// </summary>
-        private List<SqlParameter> _parameters = new();
+        List<SqlParameter> _parameters = new();
 
         /// <summary>
         /// Last used property name which will be added as a parameter to the query.
         /// </summary>
-        private string _propertyParameterName = string.Empty;
+        string _propertyParameterName = string.Empty;
+
+        /// <summary>
+        /// Generic Poco Model for where conditions.
+        /// </summary>
+        string _pocoModelName;
         #endregion
 
         #region Public Methods
-        public string BuildSelectConditions<TModel>(params Expression<Func<TModel, object>>[] selectCondition)
+        public string AddAllColumnsIntoSelect<TModel>() where TModel : class, new()
         {
-            StringBuilder selectColumnBuilder = new($"Select");
-
-            foreach (Expression<Func<TModel, object>> columns in selectCondition)
+            try
             {
-                Expression body = columns.Body is UnaryExpression unary ? unary.Operand : columns.Body;
-
-                if (body is MemberExpression member)
-                    selectColumnBuilder.Append($" {member.Member.Name},");
+                return AddAllTableColumns<TModel>();
             }
-
-            return selectColumnBuilder.ToString().TrimEnd(',') + $" \nFrom {typeof(TModel).Name}";
+            catch
+            {
+                throw;
+            }
         }
 
-        public string BuildWhereConditions<TModel>(Expression<Func<TModel, bool>> whereCondition)
+        public string BuildSelectConditions<TModel>(params Expression<Func<TModel, object>>[] selectCondition)
+        {
+            try
+            {
+                string modelName = typeof(TModel).Name;
+                StringBuilder selectColumnBuilder = new($"Select");
+
+                foreach (Expression<Func<TModel, object>> columns in selectCondition)
+                {
+                    Expression body = columns.Body is UnaryExpression unary ? unary.Operand : columns.Body;
+
+                    if (body is MemberExpression member)
+                        selectColumnBuilder.Append($" {modelName}.{member.Member.Name},");
+                }
+
+                return selectColumnBuilder.ToString().TrimEnd(',') + $" \nFrom {typeof(TModel).Name}";
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public string BuildWhereConditions<TModel>(Expression<Func<TModel, bool>> whereCondition) where TModel : class, new()
         {
             try
             {
                 _condition.Clear();
                 _parameters.Clear();
                 _propertyParameterName = string.Empty;
-                _condition.AppendLine("\n");
+                TModel model = new();
+                _pocoModelName = model.GetType().Name;
                 Visit(whereCondition);
                 return _condition.ToString();
             }
@@ -62,109 +89,131 @@ namespace Business.DynamicModelReflector.QueryBuilders
             }
         }
 
-        public string BuildLeftJoinConditions<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> leftJoinCondition)
-            where TModelLeft : class, new() where TModelRight : class, new() =>
-                $" \nLeft Join {typeof(TModelRight).Name} On {typeof(TModelLeft).Name}.{((MemberExpression)((BinaryExpression)leftJoinCondition.Body).Left).Member.Name}" +
-                    $" = {typeof(TModelRight).Name}.{((MemberExpression)((BinaryExpression)leftJoinCondition.Body).Right).Member.Name}";
+        public string BuildLeftJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
+            BuildJoinConditions("Left", joinCondition);
 
-        public string BuildRightJoinConditions<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> rightJoinCondition)
-            where TModelLeft : class, new() where TModelRight : class, new() =>
-                $" \nRight Join {typeof(TModelRight).Name} On {typeof(TModelLeft).Name}.{((MemberExpression)((BinaryExpression)rightJoinCondition.Body).Left).Member.Name}" +
-                    $" = {typeof(TModelRight).Name}.{((MemberExpression)((BinaryExpression)rightJoinCondition.Body).Right).Member.Name}";
+        public string BuildRightJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
+            BuildJoinConditions("Right", joinCondition);
 
-        public string BuildInnerJoinConditions<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> innerJoinCondition)
-            where TModelLeft : class, new() where TModelRight : class, new() =>
-                $" \nInner Join {typeof(TModelRight).Name} On {typeof(TModelLeft).Name}.{((MemberExpression)((BinaryExpression)innerJoinCondition.Body).Left).Member.Name}" +
-                    $" = {typeof(TModelRight).Name}.{((MemberExpression)((BinaryExpression)innerJoinCondition.Body).Right).Member.Name}";
+        public string BuildInnerJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
+            BuildJoinConditions("Inner", joinCondition);
 
         public void BuildGroupByConditions<TModel>(StringBuilder queryStatment, params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition) where TModel : class, new()
         {
-            string query = queryStatment.ToString();
-            Match match = new Regex(@"Select\s+(.*?)\s+From", RegexOptions.IgnoreCase | RegexOptions.Compiled).Match(query);
-
-            if (!match.Success)
-                throw new Exception("Query was not in the correct format: " + query);
-
-            string[] columnArray = match.Groups[1].Value.Split(',');
-
-            string groupByClause = " \nGroup By " + string.Join(", ", columnArray);
-
-            foreach ((Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu) groupBy in groupByCondition)
+            try
             {
-                Expression body = groupBy.groupByProperty.Body;
-                if (body is UnaryExpression unary)
-                    body = unary.Operand;
+                string query = queryStatment.ToString();
+                Match match = new Regex(@"Select\s+(.*?)\s+From", RegexOptions.IgnoreCase | RegexOptions.Compiled).Match(query);
 
-                if (body is MemberExpression member)
-                    query = query.Replace(member.Member.Name, $"{groupBy.aggregateFunctionMenu}({member.Member.Name}) As {member.Member.Name}");
+                if (!match.Success)
+                    throw new Exception("Query was not in the correct format: " + query);
+
+                string[] columnArray = match.Groups[1].Value.Split(',');
+
+                string groupByClause = " \nGroup By " + string.Join(", ", columnArray);
+
+                foreach ((Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu) groupBy in groupByCondition)
+                {
+                    Expression body = groupBy.groupByProperty.Body;
+                    if (body is UnaryExpression unary)
+                        body = unary.Operand;
+
+                    if (body is MemberExpression member)
+                        query = query.Replace(member.Member.Name, $"{groupBy.aggregateFunctionMenu}({member.Member.Name}) As {member.Member.Name}");
+                }
+
+                queryStatment.Clear();
+                queryStatment.Append(query);
+                queryStatment.Append(groupByClause);
             }
-
-            queryStatment.Clear();
-            queryStatment.Append(query);
-            queryStatment.Append(groupByClause);
+            catch
+            {
+                throw;
+            }
         }
 
 
         public string BuildOrderByConditions<TModel>(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByCondition) where TModel : class, new()
         {
-            StringBuilder orderByConditionBuilder = new(" \nOrder By");
-
-            foreach ((Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu) orderBy in orderByCondition)
+            try
             {
-                Expression body = orderBy.orderByProperty.Body is UnaryExpression unary ? unary.Operand : orderBy.orderByProperty.Body;
+                StringBuilder orderByConditionBuilder = new(" \nOrder By");
 
-                if (body is MemberExpression member)
-                    orderByConditionBuilder.Append($" {member.Member.Name} {orderBy.orderByMenu},");
+                foreach ((Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu) orderBy in orderByCondition)
+                {
+                    Expression body = orderBy.orderByProperty.Body is UnaryExpression unary ? unary.Operand : orderBy.orderByProperty.Body;
+
+                    if (body is MemberExpression member)
+                        orderByConditionBuilder.Append($" {member.Member.Name} {orderBy.orderByMenu},");
+                }
+
+                return orderByConditionBuilder.ToString().TrimEnd(',');
             }
-
-            return orderByConditionBuilder.ToString().TrimEnd(',');
+            catch
+            {
+                throw;
+            }
         }
 
         public string BuildUpdateSetConditions<TModel>(TModel model) where TModel : class, new()
         {
-            StringBuilder stringBuilder = new(" \nSet");
-
-            PropertyInfo[] propertyInfos = typeof(TModel).GetProperties();
-
-            for (int i = 0; i < propertyInfos.Length; i++)
+            try
             {
-                GenerateSqlParameter(propertyInfos[i], model);
+                StringBuilder stringBuilder = new(" \nSet");
 
-                stringBuilder.Append($" {propertyInfos[i].Name} = @{propertyInfos[i].Name}{_parameters.Count - 1},");
+                PropertyInfo[] propertyInfos = typeof(TModel).GetProperties();
+
+                for (int i = 0; i < propertyInfos.Length; i++)
+                {
+                    GenerateSqlParameter(propertyInfos[i], model);
+
+                    stringBuilder.Append($" {propertyInfos[i].Name} = @{propertyInfos[i].Name}{_parameters.Count - 1},");
+                }
+
+                return stringBuilder.ToString().TrimEnd(',');
             }
-
-            return stringBuilder.ToString().TrimEnd(',');
+            catch
+            {
+                throw;
+            }
         }
 
         public string BuildInsertConditions<TModel>(TModel model) where TModel : class, new()
         {
-            StringBuilder stringBuilder = new(" \n(");
-
-            PropertyInfo[] propertyInfos = typeof(TModel).GetProperties();
-
-            for (int i = 0; i < propertyInfos.Length; i++)
+            try
             {
-                stringBuilder.Append($" {propertyInfos[i].Name}");
+                StringBuilder stringBuilder = new(" \n(");
 
-                if (i != propertyInfos.Length - 1)
-                    stringBuilder.Append(',');
-                else
-                    stringBuilder.Append(") \nValues (");
+                PropertyInfo[] propertyInfos = typeof(TModel).GetProperties();
+
+                for (int i = 0; i < propertyInfos.Length; i++)
+                {
+                    stringBuilder.Append($" {propertyInfos[i].Name}");
+
+                    if (i != propertyInfos.Length - 1)
+                        stringBuilder.Append(',');
+                    else
+                        stringBuilder.Append(") \nValues (");
+                }
+
+                for (int i = 0; i < propertyInfos.Length; i++)
+                {
+                    GenerateSqlParameter(propertyInfos[i], model);
+
+                    stringBuilder.Append($" @{propertyInfos[i].Name}{_parameters.Count - 1}");
+
+                    if (i != propertyInfos.Length - 1)
+                        stringBuilder.Append(',');
+                }
+
+                stringBuilder.Append(')');
+
+                return stringBuilder.ToString();
             }
-
-            for (int i = 0; i < propertyInfos.Length; i++)
+            catch
             {
-                GenerateSqlParameter(propertyInfos[i], model);
-
-                stringBuilder.Append($" @{propertyInfos[i].Name}{_parameters.Count - 1}");
-
-                if (i != propertyInfos.Length - 1)
-                    stringBuilder.Append(',');
+                throw;
             }
-
-            stringBuilder.Append(')');
-
-            return stringBuilder.ToString();
         }
 
         public List<SqlParameter> GetParameters() =>
@@ -213,7 +262,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
         protected override Expression VisitMember(MemberExpression node)
         {
-            _condition.Append(node.Member.Name);
+            _condition.Append($"{_pocoModelName}.{node.Member.Name}");
             _propertyParameterName = node.Member.Name;
             return base.VisitMember(node);
         }
@@ -253,6 +302,51 @@ namespace Business.DynamicModelReflector.QueryBuilders
             _parameters.Add(new SqlParameter($"@{propertyInfo.Name}{_parameters.Count}", value));
         }
 
+        /// <summary>
+        /// Adds all the table columns to Select Query.
+        /// </summary>
+        /// <typeparam name="TModel">Generic POCO.</typeparam>
+        /// <returns>All column names.</returns>
+        private string AddAllTableColumns<TModel>()
+        {
+            StringBuilder stringBuilder = new();
+            string modelName = typeof(TModel).Name;
+
+            foreach (PropertyInfo propertyInfo in typeof(TModel).GetProperties())
+            {
+                if (typeof(TModel).GetProperty(propertyInfo.Name).IsDefined(typeof(IgnoreDataMemberAttribute), false))
+                    continue;
+
+                stringBuilder.Append($" {modelName}.{propertyInfo.Name},");
+            }
+
+            return stringBuilder.ToString().TrimEnd(',');
+        }
+
+        private string BuildJoinConditions<TModel>(string joinType, Expression<Func<TModel, object>> joinCondition) where TModel : class, new()
+        {
+            try
+            {
+                if (joinCondition.Body is UnaryExpression unary && unary.NodeType == ExpressionType.Convert)
+                {
+                    TModel model = new();
+                    string foreignKeyName = unary.Operand.ToString().Split('.').Last();
+                    string? relationshipTableName = (model.GetType().GetProperty(foreignKeyName)
+                        ?.GetCustomAttribute<ForeignKeyAttribute>() as ForeignKeyAttribute)?.Name;
+
+                    if (relationshipTableName == null)
+                        throw new Exception("Join properrty is not a forgein key.");
+
+                    return $" \n{joinType} Join {relationshipTableName} On {typeof(TModel).Name}.{foreignKeyName} = {relationshipTableName}.{foreignKeyName}";
+                }
+            }
+            catch
+            {
+                throw;
+            }
+
+            throw new Exception("Expression is in the wrong format.");
+        }
         #endregion
     }
 }

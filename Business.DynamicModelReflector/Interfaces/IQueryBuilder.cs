@@ -8,6 +8,13 @@ namespace Business.DynamicModelReflector.Interfaces
     public interface IQueryBuilder
     {
         /// <summary>
+        /// Adds all Columns to Select Query.
+        /// </summary>
+        /// <typeparam name="TModel">Generic Poco.</typeparam>
+        /// <returns>String of all Column Names.</returns>
+        string AddAllColumnsIntoSelect<TModel>() where TModel : class, new();
+
+        /// <summary>
         /// Builds the columns which will be selected in query.
         /// </summary>
         /// <param name="selectCondition">columns to select.</param>
@@ -20,34 +27,13 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <typeparam name="TModel">Generic Poco Model.</typeparam>
         /// <param name="whereCondition">Where Condition Expression.</param>
         /// <returns>Where Condition String.</returns>
-        string BuildWhereConditions<TModel>(Expression<Func<TModel, bool>> whereCondition);
+        string BuildWhereConditions<TModel>(Expression<Func<TModel, bool>> whereCondition) where TModel : class, new();
 
-        /// <summary>
-        /// Builds Left Join Conditions.
-        /// </summary>
-        /// <typeparam name="TModelLeft">Generic Poco object of the Left Table.</typeparam>
-        /// <typeparam name="TModelRight">Generic Poco object of the Right Table.</typeparam>
-        /// <param name="leftJoinCondition">Left Join Condition Expression.</param>
-        /// <returns>Left Join Conditions in string Format.</returns>
-        string BuildLeftJoinConditions<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> leftJoinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        string BuildLeftJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new();
 
-        /// <summary>
-        /// Builds Right Join Conditions.
-        /// </summary>
-        /// <typeparam name="TModelLeft">Generic Poco object of the Left Table.</typeparam>
-        /// <typeparam name="TModelRight">Generic Poco object of the Right Table.</typeparam>
-        /// <param name="rightJoinCondition">Right Join Condition Expression.</param>
-        /// <returns>Right Join Conditions in string Format.</returns>
-        string BuildRightJoinConditions<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> rightJoinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        string BuildRightJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new();
 
-        /// <summary>
-        /// Builds Inner Join Conditions.
-        /// </summary>
-        /// <typeparam name="TModelLeft">Generic Poco object of the Left Table.</typeparam>
-        /// <typeparam name="TModelRight">Generic Poco object of the Right Table.</typeparam>
-        /// <param name="innerJoinCondition">Inner Join Condition Expression.</param>
-        /// <returns>Inner Join Conditions in string Format.</returns>
-        string BuildInnerJoinConditions<TModelLeft, TModelRight>(Expression<Func<TModelLeft, TModelRight, bool>> innerJoinCondition) where TModelLeft : class, new() where TModelRight : class, new();
+        string BuildInnerJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new();
 
         /// <summary>
         /// Returns the Parameters added to the Query.
