@@ -13,10 +13,25 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <returns>ILoadJoinFactory for query manipulation.</returns>
         IJoinFactory<TModel> Select(params Expression<Func<TModel, object>>[] selectCondition);
 
+        /// <summary>
+        /// Builds Query for Left Joins.
+        /// </summary>
+        /// <param name="joinCondition">Left join Expression.</param>
+        /// <returns>ILoadJoinFactory for query manipulation.</returns>
         IJoinFactory<TModel> LeftJoin(Expression<Func<TModel, object>> joinCondition);
 
+        /// <summary>
+        /// Builds Query for Right Joins.
+        /// </summary>
+        /// <param name="joinCondition">Right join Expression.</param>
+        /// <returns>ILoadJoinFactory for query manipulation.</returns>
         IJoinFactory<TModel> RightJoin(Expression<Func<TModel, object>> joinCondition);
 
+        /// <summary>
+        /// Builds Query for Inner Joins.
+        /// </summary>
+        /// <param name="joinCondition">Inner join Expression.</param>
+        /// <returns>ILoadJoinFactory for query manipulation.</returns>
         IJoinFactory<TModel> InnerJoin(Expression<Func<TModel, object>> joinCondition);
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace Business.DynamicModelReflector.Executables
     public class SqlExecutable<TModel> : IExecutable<TModel> where TModel : class, new()
     {
         #region Fields
-        /// <summary>
+        /// <summary>s
         /// Database Context.
         /// </summary>
         IContext<TModel> _context;

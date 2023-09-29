@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -316,7 +315,15 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
             return stringBuilder.ToString().TrimEnd(',');
         }
-
+        
+        /// <summary>
+        /// Builds the join conditions for Select Statments.
+        /// </summary>
+        /// <typeparam name="TModel">Generic POCO</typeparam>
+        /// <param name="joinType">The type of join statment.</param>
+        /// <param name="joinCondition">Join Expression.</param>
+        /// <returns>String of the Join conditions.</returns>
+        /// <exception cref="Exception">Throws Exeption when the Expression is not in the correct format.</exception>
         private string BuildJoinConditions<TModel>(string joinType, Expression<Func<TModel, object>> joinCondition) where TModel : class, new()
         {
             try
