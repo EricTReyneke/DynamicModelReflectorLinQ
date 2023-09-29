@@ -40,7 +40,7 @@ namespace Business.DynamicModelReflector.DataOperations
         {
             using (SqlConnection sqlConnection = CreateConnection())
             {
-                using (SqlCommand sqlCommand = new SqlCommand(selectStatment, sqlConnection))
+                using ( SqlCommand sqlCommand = new SqlCommand(selectStatment, sqlConnection))
                 {
                     List<SqlParameter> conditionalParameters = CloneConditionalParameters(queryBuilder.GetParameters());
 
@@ -56,7 +56,7 @@ namespace Business.DynamicModelReflector.DataOperations
                             return dataTable;
                         }
                     }
-                    catch (SqlException sqlEx)
+                    catch
                     {
                         throw;
                     }

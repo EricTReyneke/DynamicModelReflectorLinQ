@@ -132,7 +132,6 @@ namespace Business.DynamicModelReflector.QueryBuilders
             }
         }
 
-
         public string BuildOrderByConditions<TModel>(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByCondition) where TModel : class, new()
         {
             try
@@ -144,7 +143,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
                     Expression body = orderBy.orderByProperty.Body is UnaryExpression unary ? unary.Operand : orderBy.orderByProperty.Body;
 
                     if (body is MemberExpression member)
-                        orderByConditionBuilder.Append($" {member.Member.Name} {orderBy.orderByMenu},");
+                        orderByConditionBuilder.Append($" {typeof(TModel).Name}.{member.Member.Name} {orderBy.orderByMenu},");
                 }
 
                 return orderByConditionBuilder.ToString().TrimEnd(',');
@@ -306,19 +305,14 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// Adds all the table columns to Select Query.
         /// </summary>
         /// <typeparam name="TModel">Generic POCO.</typeparam>
-        /// <returns>All column names.</returns>
+        /// <returns>String of all properties in the Generic POCO as table Columns.</returns>
         private string AddAllTableColumns<TModel>()
         {
             StringBuilder stringBuilder = new();
             string modelName = typeof(TModel).Name;
 
             foreach (PropertyInfo propertyInfo in typeof(TModel).GetProperties())
-            {
-                if (typeof(TModel).GetProperty(propertyInfo.Name).IsDefined(typeof(IgnoreDataMemberAttribute), false))
-                    continue;
-
                 stringBuilder.Append($" {modelName}.{propertyInfo.Name},");
-            }
 
             return stringBuilder.ToString().TrimEnd(',');
         }

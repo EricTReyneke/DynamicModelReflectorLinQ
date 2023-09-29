@@ -13,8 +13,5 @@ namespace Business.DynamicModelReflector.Data.Model
 
         [ForeignKey("Teams")]
         public int Team_Id { get; set; }
-
-        [IgnoreDataMember]
-        public ICollection<Teams> Teams { get; set; }
     }
 }
