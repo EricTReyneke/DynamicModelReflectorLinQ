@@ -45,7 +45,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                string queryStatment = string.Join("", _context.StringBuilder.ToString().Split("From"));
+                string selectedColumns = _context.StringBuilder.ToString().Split(" \nFrom")[0];
+                _context.StringBuilder.Clear().Append($"{selectedColumns},");
                 _context.StringBuilder.Append(_context.QueryBuilder.BuildLeftJoinConditions(joinCondition));
                 return new SqlJoinFactory<TModel>(_context);
             }
@@ -60,6 +61,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
+                string selectedColumns = _context.StringBuilder.ToString().Split(" \nFrom")[0];
+                _context.StringBuilder.Clear().Append($"{selectedColumns},");
                 _context.StringBuilder.Append(_context.QueryBuilder.BuildRightJoinConditions(joinCondition));
                 return new SqlJoinFactory<TModel>(_context);
             }
@@ -74,6 +77,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
+                string selectedColumns = _context.StringBuilder.ToString().Split(" \nFrom")[0];
+                _context.StringBuilder.Clear().Append($"{selectedColumns},");
                 _context.StringBuilder.Append(_context.QueryBuilder.BuildInnerJoinConditions(joinCondition));
                 return new SqlJoinFactory<TModel>(_context);
             }

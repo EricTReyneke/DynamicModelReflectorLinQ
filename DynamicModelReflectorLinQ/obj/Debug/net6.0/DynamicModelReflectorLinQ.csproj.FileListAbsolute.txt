@@ -113,3 +113,4 @@ C:\DynamicDataModelReflector\DynamicModelReflectorLinQ\bin\Debug\net6.0\Business
 C:\DynamicDataModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.CopyComplete
 C:\DynamicDataModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.genruntimeconfig.cache
 C:\DynamicDataModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\ref\DynamicModelReflectorLinQ.dll
+C:\DynamicDataModelReflector\DynamicModelReflectorLinQ\bin\Debug\net6.0\Newtonsoft.Json.dll

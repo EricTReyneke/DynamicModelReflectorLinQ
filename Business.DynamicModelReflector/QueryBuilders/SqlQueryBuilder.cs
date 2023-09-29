@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -277,7 +278,9 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
             return base.VisitConstant(node);
         }
+        #endregion
 
+        #region Private Methods
         /// <summary>
         /// Generates SqlParameters and adds them to a list of SqlParameters.
         /// </summary>
@@ -301,21 +304,64 @@ namespace Business.DynamicModelReflector.QueryBuilders
         }
 
         /// <summary>
+        /// Adds all the columns from the foreign key table into the select statement.
+        /// </summary>
+        /// <typeparam name="TModel">Generic POCO.</typeparam>
+        /// <param name="foreignTableName">Foreign Table Name.</param>
+        /// <param name="model">Poco model object.</param>
+        /// <returns>Adds all the columns from the foreign key table as a string.</returns>
+        private string AddAllForeignKeyTableColumns<TModel>(string foreignTableName, TModel model)
+        {
+            Type foreignKeyTableModel = GetForeignKeyTableModel(foreignTableName, model);
+            if (foreignKeyTableModel == null)
+                return string.Empty;
+
+            return AddAllTableColumns<TModel>(foreignKeyTableModel);
+        }
+
+        /// <summary>
+        /// Retrieves the type of the foreign key table model from the provided model.
+        /// </summary>
+        /// <typeparam name="TModel">Generic POCO.</typeparam>
+        /// <param name="foreignTableName">Foreign Table Name.</param>
+        /// <param name="model">Poco model object.</param>
+        /// <returns>Type of the foreign key table model or null if not found.</returns>
+        private Type GetForeignKeyTableModel<TModel>(string foreignTableName, TModel model)
+        {
+            PropertyInfo property = model.GetType().GetProperty(foreignTableName);
+            if (property != null && property.PropertyType.IsGenericType &&
+                property.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>))
+            {
+                return property.PropertyType.GetGenericArguments()[0];
+            }
+
+            throw new Exception($"Property {property.Name} is not a Forgein table.");
+        }
+
+        /// <summary>
         /// Adds all the table columns to Select Query.
         /// </summary>
         /// <typeparam name="TModel">Generic POCO.</typeparam>
-        /// <returns>String of all properties in the Generic POCO as table Columns.</returns>
-        private string AddAllTableColumns<TModel>()
+        /// <param name="modelType">Optional specific type of the model. If not provided, uses TModel.</param>
+        /// <returns>String of all properties in the model as table Columns.</returns>
+        private string AddAllTableColumns<TModel>(Type modelType = null)
         {
-            StringBuilder stringBuilder = new();
-            string modelName = typeof(TModel).Name;
+            modelType ??= typeof(TModel);
 
-            foreach (PropertyInfo propertyInfo in typeof(TModel).GetProperties())
+            StringBuilder stringBuilder = new();
+            string modelName = modelType.Name;
+
+            foreach (PropertyInfo propertyInfo in modelType.GetProperties())
+            {
+                if (modelType.GetProperty(propertyInfo.Name).IsDefined(typeof(IgnoreDataMemberAttribute), false))
+                    continue;
+
                 stringBuilder.Append($" {modelName}.{propertyInfo.Name},");
+            } 
 
             return stringBuilder.ToString().TrimEnd(',');
         }
-        
+
         /// <summary>
         /// Builds the join conditions for Select Statments.
         /// </summary>
@@ -328,18 +374,13 @@ namespace Business.DynamicModelReflector.QueryBuilders
         {
             try
             {
-                if (joinCondition.Body is UnaryExpression unary && unary.NodeType == ExpressionType.Convert)
-                {
-                    TModel model = new();
-                    string foreignKeyName = unary.Operand.ToString().Split('.').Last();
-                    string? relationshipTableName = (model.GetType().GetProperty(foreignKeyName)
-                        ?.GetCustomAttribute<ForeignKeyAttribute>() as ForeignKeyAttribute)?.Name;
+                string foreignKeyName = RetirevesTheForeignKeyColumnName(joinCondition);
+                string? relationshipTableName = RetrieveForeignKeyTableName(foreignKeyName, new TModel());
 
-                    if (relationshipTableName == null)
-                        throw new Exception("Join properrty is not a forgein key.");
+                if (relationshipTableName == null)
+                    throw new Exception("Join properrty is not a forgein key.");
 
-                    return $" \n{joinType} Join {relationshipTableName} On {typeof(TModel).Name}.{foreignKeyName} = {relationshipTableName}.{foreignKeyName}";
-                }
+                return $"{AddAllForeignKeyTableColumns(relationshipTableName, new TModel())} \nFrom {typeof(TModel).Name} \n{joinType} Join {relationshipTableName} On {typeof(TModel).Name}.{foreignKeyName} = {relationshipTableName}.{foreignKeyName}";
             }
             catch
             {
@@ -348,6 +389,30 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
             throw new Exception("Expression is in the wrong format.");
         }
+
+        /// <summary>
+        /// Retrieves the Forgein Key Column Name.
+        /// </summary>
+        /// <typeparam name="TModel">Generic POCO</typeparam>
+        /// <param name="joinCondition">Join Expression.</param>
+        /// <returns>Forgein Key Column Name.</returns>
+        /// <exception cref="Exception">Throws Exeption when the Expression is not in the correct format.</exception>
+        private string RetirevesTheForeignKeyColumnName<TModel>(Expression<Func<TModel, object>> joinCondition)
+            where TModel : class, new() =>
+                joinCondition.Body is UnaryExpression unary && unary.NodeType == ExpressionType.Convert ?
+                    unary.Operand.ToString().Split('.').Last()
+                        : throw new Exception("Expression is in the wrong format.");
+        /// <summary>
+        /// Retrieves the Forgein table name from the Forgein keys attribute in the POCO Model.
+        /// </summary>
+        /// <typeparam name="TModel">Generic POCO</typeparam>
+        /// <param name="foreignKeyName">Forgein key column/property name.</param>
+        /// <param name="model">POCO object.</param>
+        /// <returns>Forgein table name from the Forgein key property attribute.</returns>
+        private string? RetrieveForeignKeyTableName<TModel>(string foreignKeyName, TModel model)
+            where TModel : class, new() =>
+                (model.GetType().GetProperty(foreignKeyName)
+                    ?.GetCustomAttribute<ForeignKeyAttribute>() as ForeignKeyAttribute)?.Name;
         #endregion
     }
 }

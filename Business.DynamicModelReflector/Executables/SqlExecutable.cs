@@ -1,6 +1,6 @@
 ﻿using Business.DynamicModelReflector.Interfaces;
+using Newtonsoft.Json;
 using System.Data;
-using System.Reflection;
 
 namespace Business.DynamicModelReflector.Executables
 {
@@ -87,61 +87,25 @@ namespace Business.DynamicModelReflector.Executables
 
 
         /// <summary>
-        /// Mapes Properties to the POCO model with the data recieved from the database.
+        /// Maps Properties to the POCO model with the data received from the database.
         /// </summary>
-        /// <typeparam name="TModel">Poco model which refects the table in the database.</typeparam>
-        /// <param name="tableData">DataTable which holds the data recieved from the Database.</param>
+        /// <param name="tableData">DataTable which holds the data received from the Database.</param>
         /// <param name="setDataModel">Poco Model which the data will be inserted.</param>
         private void MapProperties(DataTable tableData, TModel setDataModel)
         {
-            foreach (DataRow rowData in tableData.Rows)
-                foreach (PropertyInfo propertyInfo in typeof(TModel).GetProperties())
-                {
-                    if (!tableData.Columns.Contains(propertyInfo.Name))
-                        continue;
-
-                    propertyInfo.SetValue(setDataModel, TypeConversion(rowData[propertyInfo.Name].ToString(), propertyInfo.PropertyType));
-                }
+            if(tableData.Rows.Count > 0)
+                setDataModel = JsonConvert.DeserializeObject<TModel>(JsonConvert.SerializeObject(tableData.Rows[0]));
         }
 
         /// <summary>
-        /// Mapes Properties to the POCO models with the data recieved from the database.
+        /// Maps Properties to the POCO models with the data received from the database.
         /// </summary>
-        /// <typeparam name="TModel">Poco model which refects the table in the database.</typeparam>
-        /// <param name="tableData">DataTable which holds the data recieved from the Database.</param>
+        /// <param name="tableData">DataTable which holds the data received from the Database.</param>
         /// <param name="dataModels">ICollection of Data Models where the data will be inserted.</param>
         private void MapProperties(DataTable tableData, ICollection<TModel> dataModels)
         {
-            foreach (DataRow rowData in tableData.Rows)
-            {
-                TModel setDataModel = new();
-                foreach (PropertyInfo propertyInfo in typeof(TModel).GetProperties())
-                {
-                    if (!tableData.Columns.Contains(propertyInfo.Name))
-                        continue;
-
-                    propertyInfo.SetValue(setDataModel, TypeConversion(rowData[propertyInfo.Name].ToString(), propertyInfo.PropertyType));
-                }
-                dataModels.Add(setDataModel);
-            }
-        }
-
-
-        /// <summary>
-        /// Converts the string value into the propertyType provided.
-        /// </summary>
-        /// <param name="propertyValue">Value which would be converted into the type provided.</param>
-        /// <param name="propertyType">Poco Property type.</param>
-        /// <returns>Object which would be the same type as the propertyType provided.</returns>
-        private object TypeConversion(string propertyValue, Type propertyType)
-        {
-            if (string.IsNullOrEmpty(propertyValue))
-                return null;
-
-            if (Nullable.GetUnderlyingType(propertyType) != null)
-                propertyType = Nullable.GetUnderlyingType(propertyType);
-
-            return Convert.ChangeType(propertyValue, propertyType);
+            foreach (var dataRow in JsonConvert.DeserializeObject<List<TModel>>(JsonConvert.SerializeObject(tableData)))
+                dataModels.Add(dataRow);
         }
         #endregion
     }

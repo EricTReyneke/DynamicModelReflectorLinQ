@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Business.DynamicModelReflector.DataOperations
 {
-    public class SqlOperations : IDataOperations
+    public class SqlDataOperations : IDataOperations
     {
         #region Fields
         /// <summary>
@@ -19,7 +19,7 @@ namespace Business.DynamicModelReflector.DataOperations
         /// <summary>
         /// Constructs the SqlDataOperations and sets the connection string from the App.Config.
         /// </summary>
-        public SqlOperations()
+        public SqlDataOperations()
         {
             _connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString;
         }
@@ -29,7 +29,7 @@ namespace Business.DynamicModelReflector.DataOperations
         /// The "DBConnectionString" key in the appsettings.json.
         /// </summary>
         /// <param name="configuration"></param>
-        public SqlOperations(IConfiguration configuration)
+        public SqlDataOperations(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DBConnectionString");
         }
@@ -40,7 +40,7 @@ namespace Business.DynamicModelReflector.DataOperations
         {
             using (SqlConnection sqlConnection = CreateConnection())
             {
-                using ( SqlCommand sqlCommand = new SqlCommand(selectStatment, sqlConnection))
+                using (SqlCommand sqlCommand = new(selectStatment, sqlConnection))
                 {
                     List<SqlParameter> conditionalParameters = CloneConditionalParameters(queryBuilder.GetParameters());
 
