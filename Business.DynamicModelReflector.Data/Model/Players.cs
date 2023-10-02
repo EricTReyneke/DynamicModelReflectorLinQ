@@ -15,6 +15,6 @@ namespace Business.DynamicModelReflector.Data.Model
         public int Team_Id { get; set; }
 
         [IgnoreDataMember]
-        public ICollection<Teams> Teams { get; set; }
+        public Teams Teams { get; set; }
     }
 }

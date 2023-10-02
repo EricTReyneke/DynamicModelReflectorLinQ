@@ -10,9 +10,7 @@ namespace DynamicModelGeneratorLinq
     {
         public static void Main(string[] args)
         {
-            IQueryBuilder sqlQueryBuilder = new SqlQueryBuilder();
-            IDataOperations sqlDataOperation = new SqlDataOperations();
-            IModelReflector sqlModelReflector = new SqlModelReflector(sqlDataOperation,sqlQueryBuilder);
+            IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder());
 
             IEnumerable<Players> players = new List<Players>();
 

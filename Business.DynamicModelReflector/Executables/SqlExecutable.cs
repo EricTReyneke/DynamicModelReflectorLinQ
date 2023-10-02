@@ -1,6 +1,8 @@
 ﻿using Business.DynamicModelReflector.Interfaces;
 using Newtonsoft.Json;
 using System.Data;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace Business.DynamicModelReflector.Executables
 {
@@ -65,7 +67,7 @@ namespace Business.DynamicModelReflector.Executables
         /// <summary>
         /// Validates what model to use and execute the query accordingly.
         /// </summary>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception">The amount of queries do not corrosond to the number of Models.</exception>
         private void ExecuteInsertQuery()
         {
             if (_context.Models == null)
@@ -93,20 +95,24 @@ namespace Business.DynamicModelReflector.Executables
         /// <param name="setDataModel">Poco Model which the data will be inserted.</param>
         private void MapProperties(DataTable tableData, TModel setDataModel)
         {
-            if(tableData.Rows.Count > 0)
+            if (tableData.Rows.Count > 0)
                 setDataModel = JsonConvert.DeserializeObject<TModel>(JsonConvert.SerializeObject(tableData.Rows[0]));
         }
 
         /// <summary>
-        /// Maps Properties to the POCO models with the data received from the database.
+        /// Maps Properties to the POCO models with the data received from the database.SSS
         /// </summary>
         /// <param name="tableData">DataTable which holds the data received from the Database.</param>
         /// <param name="dataModels">ICollection of Data Models where the data will be inserted.</param>
         private void MapProperties(DataTable tableData, ICollection<TModel> dataModels)
         {
-            foreach (var dataRow in JsonConvert.DeserializeObject<List<TModel>>(JsonConvert.SerializeObject(tableData)))
+            foreach (TModel dataRow in JsonConvert.DeserializeObject<List<TModel>>(JsonConvert.SerializeObject(tableData)))
                 dataModels.Add(dataRow);
         }
+
+        private IEnumerable<PropertyInfo> GetIgnoredProperties() =>
+            typeof(TModel).GetProperties()
+                .Where(p => p.GetCustomAttributes(typeof(IgnoreDataMemberAttribute), false).Any());
         #endregion
     }
 }

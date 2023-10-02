@@ -329,11 +329,9 @@ namespace Business.DynamicModelReflector.QueryBuilders
         private Type GetForeignKeyTableModel<TModel>(string foreignTableName, TModel model)
         {
             PropertyInfo property = model.GetType().GetProperty(foreignTableName);
-            if (property != null && property.PropertyType.IsGenericType &&
-                property.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>))
-            {
-                return property.PropertyType.GetGenericArguments()[0];
-            }
+
+            if (property != null)
+                return property.PropertyType;
 
             throw new Exception($"Property {property.Name} is not a Forgein table.");
         }

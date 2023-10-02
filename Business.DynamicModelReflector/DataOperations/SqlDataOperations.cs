@@ -31,7 +31,7 @@ namespace Business.DynamicModelReflector.DataOperations
         /// <param name="configuration"></param>
         public SqlDataOperations(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DBConnectionString");
+            _connectionString = configuration.GetConnectionString("DBConnection");
         }
         #endregion
 
@@ -49,9 +49,9 @@ namespace Business.DynamicModelReflector.DataOperations
 
                     try
                     {
-                        using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand))
+                        using (SqlDataAdapter sqlDataAdapter = new(sqlCommand))
                         {
-                            DataTable dataTable = new DataTable();
+                            DataTable dataTable = new();
                             sqlDataAdapter.Fill(dataTable);
                             return dataTable;
                         }
