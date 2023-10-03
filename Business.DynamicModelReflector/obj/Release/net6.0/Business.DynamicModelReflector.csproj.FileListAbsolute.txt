@@ -1,0 +1,15 @@
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\bin\Release\net6.0\Business.DynamicModelReflector.deps.json
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\bin\Release\net6.0\Business.DynamicModelReflector.dll
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\bin\Release\net6.0\Business.DynamicModelReflector.pdb
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\bin\Release\net6.0\Business.DynamicModelReflector.Data.dll
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\bin\Release\net6.0\Business.DynamicModelReflector.Data.pdb
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\Business.DynamicModelReflector.csproj.AssemblyReference.cache
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\Business.DynamicModelReflector.GeneratedMSBuildEditorConfig.editorconfig
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\Business.DynamicModelReflector.AssemblyInfoInputs.cache
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\Business.DynamicModelReflector.AssemblyInfo.cs
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\Business.DynamicModelReflector.csproj.CoreCompileInputs.cache
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\Business.DynamicModelReflector.csproj.CopyComplete
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\Business.DynamicModelReflector.dll
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\refint\Business.DynamicModelReflector.dll
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\Business.DynamicModelReflector.pdb
+C:\DynamicDataModelReflector\Business.DynamicModelReflector\obj\Release\net6.0\ref\Business.DynamicModelReflector.dll

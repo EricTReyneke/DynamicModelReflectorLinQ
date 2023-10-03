@@ -31,7 +31,12 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// <summary>
         /// Generic Poco Model for where conditions.
         /// </summary>
-        string _pocoModelName;
+        string _pocoModelName = string.Empty;
+
+        /// <summary>
+        /// When variables are pushed through the expressions it will be caught in variableName.
+        /// </summary>
+        string _variableName = string.Empty;
         #endregion
 
         #region Public Methods
@@ -261,26 +266,44 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
         protected override Expression VisitMember(MemberExpression node)
         {
-            _condition.Append($"{_pocoModelName}.{node.Member.Name}");
-            _propertyParameterName = node.Member.Name;
+            if (!(node.Expression is ConstantExpression constExpr) || constExpr.Value == null || !constExpr.Value.GetType().Name.Contains("DisplayClass"))
+            {
+                _condition.Append($"{_pocoModelName}.{node.Member.Name}");
+                _propertyParameterName = node.Member.Name;
+                return base.VisitMember(node);
+            }
+            _variableName = node?.ToString().Split('.').LastOrDefault();
             return base.VisitMember(node);
         }
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
+            object valueToUse;
             string paramName = $"@{_propertyParameterName}{_parameters.Count}";
+
+            if (node.Value != null && node.Value.GetType().Name.Contains("DisplayClass"))
+                valueToUse = GetClosureVariableValue(node.Value, _variableName);
+            else
+                valueToUse = node.Value;
+
             _condition.Append(paramName);
 
-            if (node.Type == typeof(string) || node.Type == typeof(DateTime))
-                _parameters.Add(new SqlParameter(paramName, Convert.ToString(node.Value)));
-            else
-                _parameters.Add(new SqlParameter(paramName, node.Value));
+            _parameters.Add(valueToUse is string || valueToUse is DateTime
+                ? new SqlParameter(paramName, Convert.ToString(valueToUse))
+                : new SqlParameter(paramName, valueToUse));
 
             return base.VisitConstant(node);
         }
         #endregion
 
         #region Private Methods
+        private object GetClosureVariableValue(object closure, string variableName) =>
+                 closure.GetType()
+                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(field => field.Name == variableName)
+                .Select(field => field.GetValue(closure))
+                .FirstOrDefault();
+
         /// <summary>
         /// Generates SqlParameters and adds them to a list of SqlParameters.
         /// </summary>
@@ -355,7 +378,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
                     continue;
 
                 stringBuilder.Append($" {modelName}.{propertyInfo.Name},");
-            } 
+            }
 
             return stringBuilder.ToString().TrimEnd(',');
         }

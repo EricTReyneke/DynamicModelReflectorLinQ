@@ -14,11 +14,12 @@ namespace DynamicModelGeneratorLinq
 
             IEnumerable<Players> players = new List<Players>();
 
+            int lekker = 1;
+            int lekker2 = 1;
+
             sqlModelReflector
                 .Load(players)
-                .Select(players => players.Player_Id, players => players.Player_Name, players => players.Team_Id)
-                .InnerJoin(players => players.Team_Id)
-                .OrderBy((players => players.Player_Id, OrderByMenu.Desc))
+                .Where(players => players.Player_Id == lekker && players.Team_Id == lekker2)
                 .Execute();
         }
     }
