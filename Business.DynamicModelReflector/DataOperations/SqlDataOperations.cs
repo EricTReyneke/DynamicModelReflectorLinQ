@@ -28,7 +28,7 @@ namespace Business.DynamicModelReflector.DataOperations
         /// Constructs the SqlDataOperations and allows for IConfiguration injection to retrieve the Connection String From 
         /// The "DBConnectionString" key in the appsettings.json.
         /// </summary>
-        /// <param name="configuration"></param>
+        /// <param name="configuration">Appsettings from the running program.</param>
         public SqlDataOperations(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DBConnection");
