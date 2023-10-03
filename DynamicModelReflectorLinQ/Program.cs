@@ -10,17 +10,27 @@ namespace DynamicModelGeneratorLinq
     {
         public static void Main(string[] args)
         {
+            ValidateUserCredentails("Eras", "eiZoWdkCeTAHHyD+i1WiIlEIYhg=");
+;        }
+
+        public static bool ValidateUserCredentails(string userName, string password)
+        {
             IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder());
 
-            IEnumerable<Players> players = new List<Players>();
+            if (userName == null || password == null)
+                return false;
 
-            int lekker = 1;
-            int lekker2 = 1;
+            UserInformation userLogin = new();
 
             sqlModelReflector
-                .Load(players)
-                .Where(players => players.Player_Id == lekker && players.Team_Id == lekker2)
+                .Load(userLogin)
+                .Where(userLogin => userLogin.UserName == userName && userLogin.Password == password)
                 .Execute();
+
+            if (string.IsNullOrEmpty(userLogin.UserName) || string.IsNullOrEmpty(userLogin.Password))
+                return false;
+
+            return true;
         }
     }
 }

@@ -89,14 +89,29 @@ namespace Business.DynamicModelReflector.Executables
 
 
         /// <summary>
-        /// Maps Properties to the POCO model with the data received from the database.
+        /// Mapes Properties to the POCO model with the data recieved from the database.
         /// </summary>
-        /// <param name="tableData">DataTable which holds the data received from the Database.</param>
+        /// <param name="tableData">DataTable which holds the data recieved from the Database.</param>
         /// <param name="setDataModel">Poco Model which the data will be inserted.</param>
         private void MapProperties(DataTable tableData, TModel setDataModel)
         {
-            if (tableData.Rows.Count > 0)
-                setDataModel = JsonConvert.DeserializeObject<TModel>(JsonConvert.SerializeObject(tableData.Rows[0]));
+            if (tableData.Rows.Count == 0) return;
+
+            IEnumerable<PropertyInfo> properties = typeof(TModel).GetProperties()
+                .Where(p => p.CanWrite && tableData.Columns.Contains(p.Name))
+                .ToList();
+
+            Parallel.ForEach(properties, propertyInfo =>
+            {
+                object value = tableData.Rows[0][propertyInfo.Name];
+
+                if (value == DBNull.Value)
+                    value = null;
+                else
+                    value = TypeConversion(value.ToString(), propertyInfo.PropertyType);
+
+                propertyInfo.SetValue(setDataModel, value);
+            });
         }
 
         /// <summary>
@@ -108,6 +123,23 @@ namespace Business.DynamicModelReflector.Executables
         {
             foreach (TModel dataRow in JsonConvert.DeserializeObject<List<TModel>>(JsonConvert.SerializeObject(tableData)))
                 dataModels.Add(dataRow);
+        }
+
+        /// <summary>
+        /// Converts the string value into the propertyType provided.
+        /// </summary>
+        /// <param name="propertyValue">Value which would be converted into the type provided.</param>
+        /// <param name="propertyType">Poco Property type.</param>
+        /// <returns>Object which would be the same type as the propertyType provided.</returns>
+        private object TypeConversion(string propertyValue, Type propertyType)
+        {
+            if (string.IsNullOrEmpty(propertyValue))
+                return null;
+
+            if (Nullable.GetUnderlyingType(propertyType) != null)
+                propertyType = Nullable.GetUnderlyingType(propertyType);
+
+            return Convert.ChangeType(propertyValue, propertyType);
         }
 
         private IEnumerable<PropertyInfo> GetIgnoredProperties() =>
