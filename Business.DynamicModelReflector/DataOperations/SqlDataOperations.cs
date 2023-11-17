@@ -3,6 +3,8 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.Extensions.Configuration;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Business.DynamicModelReflector.DataOperations
 {
@@ -140,7 +142,7 @@ namespace Business.DynamicModelReflector.DataOperations
         /// <returns>Open Sql connection.</returns>
         private SqlConnection CreateConnection()
         {
-            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlConnection sqlConnection = new(_connectionString);
             sqlConnection.Open();
             return sqlConnection;
         }

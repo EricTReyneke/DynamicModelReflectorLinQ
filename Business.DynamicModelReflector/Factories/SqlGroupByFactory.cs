@@ -1,4 +1,5 @@
-﻿using Business.DynamicModelReflector.Data.Model;
+﻿using Business.DynamicModelReflector.Conditions;
+using Business.DynamicModelReflector.Data.Model;
 using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Interfaces;
 using System.Linq.Expressions;
@@ -31,7 +32,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildOrderByConditions(orderByConditions));
+                SqlOrderBy<TModel> sqlOrderBy = new(_context);
+                sqlOrderBy.OrderBy(orderByConditions);
                 return new SqlExecutable<TModel>(_context);
             }
             catch (Exception ex)

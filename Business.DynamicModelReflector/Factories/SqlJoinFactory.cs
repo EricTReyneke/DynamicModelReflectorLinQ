@@ -1,11 +1,12 @@
-﻿using Business.DynamicModelReflector.Data.Model;
+﻿using Business.DynamicModelReflector.Conditions;
+using Business.DynamicModelReflector.Data.Model;
 using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Interfaces;
 using System.Linq.Expressions;
 
 namespace Business.DynamicModelReflector.Factories
 {
-    public class SqlJoinFactory<TModel> : IJoinFactory<TModel> where TModel : class, new()
+    public class SqlJoinFactory<TModel> : ISqlJoinFactory<TModel> where TModel : class, new()
     {
         #region Fields
         /// <summary>
@@ -26,12 +27,12 @@ namespace Business.DynamicModelReflector.Factories
         #endregion
 
         #region Public Methods
-        public IJoinFactory<TModel> Select(params Expression<Func<TModel, object>>[] selectCondition)
+        public SqlJoinFactory<TModel> LeftJoin(Expression<Func<TModel, object>> joinCondition)
         {
             try
             {
-                _context.StringBuilder.Clear();
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildSelectConditions(selectCondition));
+                SqlJoin<TModel> sqlJoin = new(_context);
+                sqlJoin.LeftJoin(joinCondition);
                 return new SqlJoinFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -41,13 +42,12 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public IJoinFactory<TModel> LeftJoin(Expression<Func<TModel, object>> joinCondition)
+        public SqlJoinFactory<TModel> RightJoin(Expression<Func<TModel, object>> joinCondition)
         {
             try
             {
-                string selectedColumns = _context.StringBuilder.ToString().Split(" \nFrom")[0];
-                _context.StringBuilder.Clear().Append($"{selectedColumns},");
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildLeftJoinConditions(joinCondition));
+                SqlJoin<TModel> sqlJoin = new(_context);
+                sqlJoin.RightJoin(joinCondition);
                 return new SqlJoinFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -57,29 +57,12 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public IJoinFactory<TModel> RightJoin(Expression<Func<TModel, object>> joinCondition)
+        public SqlJoinFactory<TModel> InnerJoin(Expression<Func<TModel, object>> joinCondition)
         {
             try
             {
-                string selectedColumns = _context.StringBuilder.ToString().Split(" \nFrom")[0];
-                _context.StringBuilder.Clear().Append($"{selectedColumns},");
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildRightJoinConditions(joinCondition));
-                return new SqlJoinFactory<TModel>(_context);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception Message: {ex.Message}\nInner Exception: {ex.InnerException}\nStack Trace: {ex.StackTrace}");
-                throw;
-            }
-        }
-
-        public IJoinFactory<TModel> InnerJoin(Expression<Func<TModel, object>> joinCondition)
-        {
-            try
-            {
-                string selectedColumns = _context.StringBuilder.ToString().Split(" \nFrom")[0];
-                _context.StringBuilder.Clear().Append($"{selectedColumns},");
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildInnerJoinConditions(joinCondition));
+                SqlJoin<TModel> sqlJoin = new(_context);
+                sqlJoin.InnerJoin(joinCondition);
                 return new SqlJoinFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -93,7 +76,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                _context.StringBuilder.Append($" \nWhere {_context.QueryBuilder.BuildWhereConditions(whereCondition)}");
+                SqlWhere<TModel> sqlWhere = new(_context);
+                sqlWhere.Where(whereCondition);
                 return new SqlWhereFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -107,7 +91,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                _context.QueryBuilder.BuildGroupByConditions(_context.StringBuilder, groupByCondition);
+                SqlGroupBy<TModel> sqlGroupBy = new(_context);
+                sqlGroupBy.GroupBy(groupByCondition);
                 return new SqlGroupByFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -121,7 +106,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildOrderByConditions(orderByConditions));
+                SqlOrderBy<TModel> sqlOrderBy = new(_context);
+                sqlOrderBy.OrderBy(orderByConditions);
                 return new SqlExecutable<TModel>(_context);
             }
             catch (Exception ex)

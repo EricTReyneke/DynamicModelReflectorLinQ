@@ -46,7 +46,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
                 StringBuilder buildLoadQuery = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
                 buildLoadQuery.Append($"Select{_queryBuilder.AddAllColumnsIntoSelect<TModel>()} \nFrom {typeof(TModel).Name} ");
-                return new SqlJoinFactory<TModel>(sqlContext);
+                return new SqlLoadFactory<TModel>(sqlContext);
             }
             catch(Exception ex)
             {
@@ -63,7 +63,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
                 TModel model = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, models);
                 buildLoadQuery.Append($"Select{_queryBuilder.AddAllColumnsIntoSelect<TModel>()} \nFrom {model.GetType().Name} ");
-                return new SqlJoinFactory<TModel>(sqlContext);
+                return new SqlLoadFactory<TModel>(sqlContext);
             }
             catch (Exception ex)
             {

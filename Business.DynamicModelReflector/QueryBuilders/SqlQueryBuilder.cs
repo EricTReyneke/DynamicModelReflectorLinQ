@@ -87,9 +87,8 @@ namespace Business.DynamicModelReflector.QueryBuilders
                 Visit(whereCondition);
                 return _condition.ToString();
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"Exception Message: {ex.Message}\nInner Exception: {ex.InnerException}\nStack Trace: {ex.StackTrace}");
                 throw;
             }
         }
@@ -227,81 +226,112 @@ namespace Business.DynamicModelReflector.QueryBuilders
         #region Protected Methods
         protected override Expression VisitBinary(BinaryExpression node)
         {
-            Visit(node.Left);
-
-            switch (node.NodeType)
+            try
             {
-                case ExpressionType.AndAlso:
-                    _condition.Append(" AND ");
-                    break;
-                case ExpressionType.OrElse:
-                    _condition.Append(" OR ");
-                    break;
-                case ExpressionType.Equal:
-                    _condition.Append(" = ");
-                    break;
-                case ExpressionType.NotEqual:
-                    _condition.Append(" <> ");
-                    break;
-                case ExpressionType.LessThan:
-                    _condition.Append(" < ");
-                    break;
-                case ExpressionType.LessThanOrEqual:
-                    _condition.Append(" <= ");
-                    break;
-                case ExpressionType.GreaterThan:
-                    _condition.Append(" > ");
-                    break;
-                case ExpressionType.GreaterThanOrEqual:
-                    _condition.Append(" >= ");
-                    break;
-                default:
-                    throw new NotSupportedException($"Binary operator '{node.NodeType}' is not supported.");
+                Visit(node.Left);
+
+                switch (node.NodeType)
+                {
+                    case ExpressionType.AndAlso:
+                        _condition.Append(" AND ");
+                        break;
+                    case ExpressionType.OrElse:
+                        _condition.Append(" OR ");
+                        break;
+                    case ExpressionType.Equal:
+                        _condition.Append(" = ");
+                        break;
+                    case ExpressionType.NotEqual:
+                        _condition.Append(" <> ");
+                        break;
+                    case ExpressionType.LessThan:
+                        _condition.Append(" < ");
+                        break;
+                    case ExpressionType.LessThanOrEqual:
+                        _condition.Append(" <= ");
+                        break;
+                    case ExpressionType.GreaterThan:
+                        _condition.Append(" > ");
+                        break;
+                    case ExpressionType.GreaterThanOrEqual:
+                        _condition.Append(" >= ");
+                        break;
+                    default:
+                        throw new NotSupportedException($"Binary operator '{node.NodeType}' is not supported.");
+                }
+
+                Visit(node.Right);
+
+                return node;
             }
-
-            Visit(node.Right);
-
-            return node;
+            catch
+            {
+                throw;
+            }
         }
 
         protected override Expression VisitMember(MemberExpression node)
         {
-            if (!(node.Expression is ConstantExpression constExpr) || constExpr.Value == null || !constExpr.Value.GetType().Name.Contains("DisplayClass"))
+            try
             {
-                _condition.Append($"{_pocoModelName}.{node.Member.Name}");
-                _propertyParameterName = node.Member.Name;
+                if (!(node.Expression is ConstantExpression constExpr) || constExpr.Value == null || !constExpr.Value.GetType().Name.Contains("DisplayClass"))
+                {
+                    _condition.Append($"{_pocoModelName}.{node.Member.Name}");
+                    _propertyParameterName = node.Member.Name;
+                    return base.VisitMember(node);
+                }
+                _variableName = node?.ToString().Split('.').LastOrDefault();
                 return base.VisitMember(node);
             }
-            _variableName = node?.ToString().Split('.').LastOrDefault();
-            return base.VisitMember(node);
+            catch
+            {
+                throw;
+            }
         }
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
-            object valueToUse;
-            string paramName = $"@{_propertyParameterName}{_parameters.Count}";
+            try
+            {
+                object valueToUse;
+                string paramName = $"@{_propertyParameterName}{_parameters.Count}";
 
-            if (node.Value != null && node.Value.GetType().Name.Contains("DisplayClass"))
-                valueToUse = GetClosureVariableValue(node.Value, _variableName);
-            else
-                valueToUse = node.Value;
+                if (node.Value != null && node.Value.GetType().Name.Contains("DisplayClass"))
+                    valueToUse = GetClosureVariableValue(node.Value, _variableName);
+                else
+                    valueToUse = node.Value;
 
-            _condition.Append(paramName);
+                _condition.Append(paramName);
 
-            _parameters.Add(valueToUse is string || valueToUse is DateTime
-                ? new SqlParameter(paramName, Convert.ToString(valueToUse))
-                : new SqlParameter(paramName, valueToUse));
+                _parameters.Add(valueToUse is string || valueToUse is DateTime
+                    ? new SqlParameter(paramName, Convert.ToString(valueToUse))
+                    : new SqlParameter(paramName, valueToUse));
 
-            return base.VisitConstant(node);
+                return base.VisitConstant(node);
+            }
+            catch
+            {
+                throw;
+            }
         }
         #endregion
 
         #region Private Methods
-        private object GetClosureVariableValue(object closure, string variableName) =>
-                 closure.GetType()
+        /// <summary>
+        /// Retrieves the value of a specified variable from a given object using reflection.
+        /// </summary>
+        /// <param name="nodeValue">The object from which to extract the variable's value.</param>
+        /// <param name="variableName">The name of the variable whose value is to be retrieved.</param>
+        /// <returns>The value of the specified variable. Returns null if the variable is not found.</returns>
+        /// <remarks>
+        /// This method uses reflection to access private and public fields of the object.
+        /// It is intended for scenarios where accessing internal object state is necessary, such as debugging or logging. Caution is advised due to potential performance impacts and breaking of encapsulation principles.
+        /// </remarks>
+        private object GetClosureVariableValue(object nodeValue, string variableName) =>
+                 nodeValue.GetType()
                 .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(field => field.Name == variableName)
-                .Select(field => field.GetValue(closure))
+                .Select(field => field.GetValue(nodeValue))
                 .FirstOrDefault();
 
         /// <summary>
@@ -399,7 +429,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
                 string? relationshipTableName = RetrieveForeignKeyTableName(foreignKeyName, new TModel());
 
                 if (relationshipTableName == null)
-                    throw new Exception("Join properrty is not a forgein key.");
+                    throw new Exception("Join property is not a forgein key.");
 
                 return $"{AddAllForeignKeyTableColumns(relationshipTableName, new TModel())} \nFrom {typeof(TModel).Name} \n{joinType} Join {relationshipTableName} On {typeof(TModel).Name}.{foreignKeyName} = {relationshipTableName}.{foreignKeyName}";
             }

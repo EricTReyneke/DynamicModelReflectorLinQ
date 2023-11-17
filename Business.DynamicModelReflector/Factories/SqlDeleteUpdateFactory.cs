@@ -1,7 +1,7 @@
-﻿using Business.DynamicModelReflector.Executables;
+﻿using Business.DynamicModelReflector.Conditions;
+using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Interfaces;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Business.DynamicModelReflector.Factories
 {
@@ -30,7 +30,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                _context.StringBuilder.Append($"Where {_context.QueryBuilder.BuildWhereConditions(whereCondition)}");
+                SqlWhere<TModel> sqlWhere = new(_context);
+                sqlWhere.Where(whereCondition);
                 return new SqlExecutable<TModel>(_context);
             }
             catch (Exception ex)

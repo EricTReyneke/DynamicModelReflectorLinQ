@@ -1,8 +1,8 @@
-﻿using Business.DynamicModelReflector.Data.Model;
+﻿using Business.DynamicModelReflector.Conditions;
+using Business.DynamicModelReflector.Data.Model;
 using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Interfaces;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Business.DynamicModelReflector.Factories
 {
@@ -31,7 +31,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                _context.QueryBuilder.BuildGroupByConditions(_context.StringBuilder, groupByCondition);
+                SqlGroupBy<TModel> sqlGroupBy = new(_context);
+                sqlGroupBy.GroupBy(groupByCondition);
                 return new SqlGroupByFactory<TModel>(_context);
             }
             catch (Exception ex)
@@ -45,7 +46,8 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildOrderByConditions(orderByConditions));
+                SqlOrderBy<TModel> sqlOrderBy = new(_context);
+                sqlOrderBy.OrderBy(orderByConditions);
                 return new SqlExecutable<TModel>(_context);
             }
             catch (Exception ex)
