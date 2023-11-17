@@ -1,6 +1,6 @@
-﻿namespace Business.DynamicModelReflector.Data.Model
+﻿namespace Business.DynamicModelReflector.Enums
 {
-    public enum AggregateFunctionMenu
+    public enum SqlAggregateFunctionMenu
     {
         Count,
         Sum,

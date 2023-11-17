@@ -1,4 +1,5 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
+using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Interfaces;
 using System.Linq.Expressions;
@@ -26,7 +27,7 @@ namespace Business.DynamicModelReflector.Conditions
         #endregion
 
         #region Public Methods
-        public void OrderBy(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByConditions)
+        public void OrderBy(params (Expression<Func<TModel, object>> orderByProperty, SqlOrderByMenu orderByMenu)[] orderByConditions)
         {
             try
             {

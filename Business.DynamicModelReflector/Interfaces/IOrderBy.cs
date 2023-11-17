@@ -1,4 +1,5 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
+using Business.DynamicModelReflector.Enums;
 using System.Linq.Expressions;
 
 namespace Business.DynamicModelReflector.Interfaces
@@ -9,6 +10,6 @@ namespace Business.DynamicModelReflector.Interfaces
         /// Builds OrderBy condition.
         /// </summary>
         /// <param name="orderByConditions">Specified properties to order by.</param>
-        void OrderBy(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByConditions);
+        void OrderBy(params (Expression<Func<TModel, object>> orderByProperty, SqlOrderByMenu orderByMenu)[] orderByConditions);
     }
 }

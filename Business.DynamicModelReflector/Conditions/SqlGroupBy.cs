@@ -1,4 +1,5 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
+using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Interfaces;
 using System.Linq.Expressions;
 
@@ -25,7 +26,7 @@ namespace Business.DynamicModelReflector.Conditions
         #endregion
 
         #region
-        public void GroupBy(params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition)
+        public void GroupBy(params (Expression<Func<TModel, object>> groupByProperty, SqlAggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition)
         {
             try
             {

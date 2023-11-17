@@ -1,5 +1,6 @@
 ﻿using Business.DynamicModelReflector.Conditions;
 using Business.DynamicModelReflector.Data.Model;
+using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Interfaces;
 using System.Linq.Expressions;
@@ -102,7 +103,7 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public IGroupByFactory<TModel> GroupBy(params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition)
+        public IGroupByFactory<TModel> GroupBy(params (Expression<Func<TModel, object>> groupByProperty, SqlAggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition)
         {
             try
             {
@@ -117,7 +118,7 @@ namespace Business.DynamicModelReflector.Factories
             }
         }
 
-        public IExecutable<TModel> OrderBy(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByConditions)
+        public IExecutable<TModel> OrderBy(params (Expression<Func<TModel, object>> orderByProperty, SqlOrderByMenu orderByMenu)[] orderByConditions)
         {
             try
             {

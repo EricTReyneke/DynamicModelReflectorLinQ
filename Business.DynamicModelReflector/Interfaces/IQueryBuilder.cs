@@ -1,4 +1,5 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
+using Business.DynamicModelReflector.Enums;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Text;
@@ -73,8 +74,8 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <param name="model">Poco Model Object.</param>
         string BuildInsertConditions<TModel>(TModel model) where TModel : class, new();
 
-        void BuildGroupByConditions<TModel>(StringBuilder QueryStatment, params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition) where TModel : class, new();
+        void BuildGroupByConditions<TModel>(StringBuilder QueryStatment, params (Expression<Func<TModel, object>> groupByProperty, SqlAggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition) where TModel : class, new();
 
-        string BuildOrderByConditions<TModel>(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByCondition) where TModel : class, new();
+        string BuildOrderByConditions<TModel>(params (Expression<Func<TModel, object>> orderByProperty, SqlOrderByMenu orderByMenu)[] orderByCondition) where TModel : class, new();
     }
 }

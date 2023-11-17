@@ -1,4 +1,5 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
+using Business.DynamicModelReflector.Enums;
 using System.Linq.Expressions;
 
 namespace Business.DynamicModelReflector.Interfaces
@@ -9,6 +10,6 @@ namespace Business.DynamicModelReflector.Interfaces
         /// Builds GroupBy Conditions.
         /// </summary>
         /// <param name="groupByCondition">GroupBy Expression.</param>
-        void GroupBy(params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition);
+        void GroupBy(params (Expression<Func<TModel, object>> groupByProperty, SqlAggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition);
     }
 }

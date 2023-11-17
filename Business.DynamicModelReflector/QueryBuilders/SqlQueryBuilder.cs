@@ -1,4 +1,5 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
+using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
@@ -102,7 +103,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
         public string BuildInnerJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
             BuildJoinConditions("Inner", joinCondition);
 
-        public void BuildGroupByConditions<TModel>(StringBuilder queryStatment, params (Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition) where TModel : class, new()
+        public void BuildGroupByConditions<TModel>(StringBuilder queryStatment, params (Expression<Func<TModel, object>> groupByProperty, SqlAggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition) where TModel : class, new()
         {
             try
             {
@@ -116,7 +117,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
                 string groupByClause = " \nGroup By " + string.Join(", ", columnArray);
 
-                foreach ((Expression<Func<TModel, object>> groupByProperty, AggregateFunctionMenu aggregateFunctionMenu) groupBy in groupByCondition)
+                foreach ((Expression<Func<TModel, object>> groupByProperty, SqlAggregateFunctionMenu aggregateFunctionMenu) groupBy in groupByCondition)
                 {
                     Expression body = groupBy.groupByProperty.Body;
                     if (body is UnaryExpression unary)
@@ -136,13 +137,13 @@ namespace Business.DynamicModelReflector.QueryBuilders
             }
         }
 
-        public string BuildOrderByConditions<TModel>(params (Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu)[] orderByCondition) where TModel : class, new()
+        public string BuildOrderByConditions<TModel>(params (Expression<Func<TModel, object>> orderByProperty, SqlOrderByMenu orderByMenu)[] orderByCondition) where TModel : class, new()
         {
             try
             {
                 StringBuilder orderByConditionBuilder = new(" \nOrder By");
 
-                foreach ((Expression<Func<TModel, object>> orderByProperty, OrderByMenu orderByMenu) orderBy in orderByCondition)
+                foreach ((Expression<Func<TModel, object>> orderByProperty, SqlOrderByMenu orderByMenu) orderBy in orderByCondition)
                 {
                     Expression body = orderBy.orderByProperty.Body is UnaryExpression unary ? unary.Operand : orderBy.orderByProperty.Body;
 

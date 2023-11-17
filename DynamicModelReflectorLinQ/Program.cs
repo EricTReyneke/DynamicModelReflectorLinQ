@@ -1,5 +1,6 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
 using Business.DynamicModelReflector.DataOperations;
+using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.ModelReflectors;
 using Business.DynamicModelReflector.QueryBuilders;
@@ -18,6 +19,7 @@ namespace DynamicModelGeneratorLinq
                 .Load(userInformation)
                 .Select(userInformation => userInformation.Id, userInformation => userInformation.Password)
                 .Where(userInformation => userInformation.Id == 1)
+                .OrderBy((userInformation => userInformation.Id, SqlOrderByMenu.Desc))
                 .Execute();
         }
     }
