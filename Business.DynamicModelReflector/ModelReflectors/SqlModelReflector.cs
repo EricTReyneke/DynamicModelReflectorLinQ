@@ -40,9 +40,6 @@ namespace Business.DynamicModelReflector.ModelReflectors
         {
             try
             {
-                if (model is IEnumerable)
-                    return Load(model as IEnumerable<TModel>);
-
                 StringBuilder buildLoadQuery = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
                 buildLoadQuery.Append($"Select{_queryBuilder.AddAllColumnsIntoSelect<TModel>()} \nFrom {typeof(TModel).Name} ");
@@ -108,9 +105,6 @@ namespace Business.DynamicModelReflector.ModelReflectors
         {
             try
             {
-                if (model is IEnumerable)
-                    return Create((IEnumerable<TModel>)model);
-
                 StringBuilder buildLoadQuery = new();
                 buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(model)}");
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);

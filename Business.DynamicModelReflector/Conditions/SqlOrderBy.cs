@@ -1,6 +1,4 @@
-﻿using Business.DynamicModelReflector.Data.Model;
-using Business.DynamicModelReflector.Enums;
-using Business.DynamicModelReflector.Executables;
+﻿using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Interfaces;
 using System.Linq.Expressions;
 
