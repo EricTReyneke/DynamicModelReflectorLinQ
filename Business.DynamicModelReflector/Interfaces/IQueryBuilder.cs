@@ -74,8 +74,20 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <param name="model">Poco Model Object.</param>
         string BuildInsertConditions<TModel>(TModel model) where TModel : class, new();
 
+        /// <summary>
+        /// Build the GroupBy conditions.
+        /// </summary>
+        /// <typeparam name="TModel">Generic POCO.</typeparam>
+        /// <param name="QueryStatment">Group by query expression.</param>
+        /// <param name="groupByCondition">GroupBy Aggregate function.</param>
         void BuildGroupByConditions<TModel>(StringBuilder QueryStatment, params (Expression<Func<TModel, object>> groupByProperty, SqlAggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition) where TModel : class, new();
 
+        /// <summary>
+        /// Builds Order By conditions.
+        /// </summary>
+        /// <typeparam name="TModel">Generic POCO.</typeparam>
+        /// <param name="orderByCondition">Order By expression.</param>
+        /// <returns>Order By condition.</returns>
         string BuildOrderByConditions<TModel>(params (Expression<Func<TModel, object>> orderByProperty, SqlOrderByMenu orderByMenu)[] orderByCondition) where TModel : class, new();
     }
 }

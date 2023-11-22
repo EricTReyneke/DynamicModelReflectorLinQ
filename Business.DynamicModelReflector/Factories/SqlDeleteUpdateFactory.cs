@@ -30,7 +30,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlWhere<TModel> sqlWhere = new(_context);
+                IWhere<TModel> sqlWhere = new SqlWhere<TModel>(_context);
                 sqlWhere.Where(whereCondition);
                 return new SqlExecutable<TModel>(_context);
             }

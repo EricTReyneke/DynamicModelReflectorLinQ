@@ -32,7 +32,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlSelect<TModel> sqlSelect = new(_context);
+                ISelect<TModel> sqlSelect = new SqlSelect<TModel>(_context);
                 sqlSelect.Select(selectCondition);
                 return new SqlLoadFactory<TModel>(_context);
             }
@@ -47,7 +47,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlJoin<TModel> sqlJoin = new(_context);
+                IJoin<TModel> sqlJoin = new SqlJoin<TModel>(_context);
                 sqlJoin.LeftJoin(joinCondition);
                 return new SqlLoadFactory<TModel>(_context);
             }
@@ -62,7 +62,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlJoin<TModel> sqlJoin = new(_context);
+                IJoin<TModel> sqlJoin = new SqlJoin<TModel>(_context);
                 sqlJoin.RightJoin(joinCondition);
                 return new SqlLoadFactory<TModel>(_context);
             }
@@ -77,7 +77,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlJoin<TModel> sqlJoin = new(_context);
+                IJoin<TModel> sqlJoin = new SqlJoin<TModel>(_context);
                 sqlJoin.InnerJoin(joinCondition);
                 return new SqlLoadFactory<TModel>(_context);
             }
@@ -92,7 +92,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlWhere<TModel> sqlWhere = new(_context);
+                IWhere<TModel> sqlWhere = new SqlWhere<TModel>(_context);
                 sqlWhere.Where(whereCondition);
                 return new SqlWhereFactory<TModel>(_context);
             }
@@ -107,7 +107,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlGroupBy<TModel> sqlGroupBy = new(_context);
+                IGroupBy<TModel> sqlGroupBy = new SqlGroupBy<TModel>(_context);
                 sqlGroupBy.GroupBy(groupByCondition);
                 return new SqlGroupByFactory<TModel>(_context);
             }
@@ -122,7 +122,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlOrderBy<TModel> sqlOrderBy = new(_context);
+                IOrderBy<TModel> sqlOrderBy = new SqlOrderBy<TModel>(_context);
                 sqlOrderBy.OrderBy(orderByConditions);
                 return new SqlExecutable<TModel>(_context);
             }

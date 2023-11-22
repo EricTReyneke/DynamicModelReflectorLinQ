@@ -33,7 +33,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlOrderBy<TModel> sqlOrderBy = new(_context);
+                IOrderBy<TModel> sqlOrderBy = new SqlOrderBy<TModel>(_context);
                 sqlOrderBy.OrderBy(orderByConditions);
                 return new SqlExecutable<TModel>(_context);
             }

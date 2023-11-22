@@ -1,5 +1,4 @@
 ﻿using Business.DynamicModelReflector.Conditions;
-using Business.DynamicModelReflector.Data.Model;
 using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Interfaces;
@@ -32,7 +31,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlGroupBy<TModel> sqlGroupBy = new(_context);
+                IGroupBy<TModel> sqlGroupBy = new SqlGroupBy<TModel>(_context);
                 sqlGroupBy.GroupBy(groupByCondition);
                 return new SqlGroupByFactory<TModel>(_context);
             }
@@ -47,7 +46,7 @@ namespace Business.DynamicModelReflector.Factories
         {
             try
             {
-                SqlOrderBy<TModel> sqlOrderBy = new(_context);
+                IOrderBy<TModel> sqlOrderBy = new SqlOrderBy<TModel>(_context);
                 sqlOrderBy.OrderBy(orderByConditions);
                 return new SqlExecutable<TModel>(_context);
             }
