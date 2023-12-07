@@ -1,6 +1,7 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
 using Business.DynamicModelReflector.DataOperations;
 using Business.DynamicModelReflector.Enums;
+using Business.DynamicModelReflector.Helpers;
 using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.ModelReflectors;
 using Business.DynamicModelReflector.QueryBuilders;
@@ -11,15 +12,16 @@ namespace DynamicModelGeneratorLinq
     {
         public static void Main(string[] args)
         {
-            IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder());
+            IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder(new SqlDataOperationHelper()));
 
-            UserInformation userInformation = new();
+            TestIdentity testIdentity = new()
+            {
+                Id = 7,
+                Lekker = "Lekker"
+            };
 
             sqlModelReflector
-                .Load(userInformation)
-                .Select(userInformation => userInformation.Id, userInformation => userInformation.Password)
-                .Where(userInformation => userInformation.Id == 1)
-                .OrderBy((userInformation => userInformation.Id, SqlOrderByMenu.Desc))
+                .Create(testIdentity)
                 .Execute();
         }
     }

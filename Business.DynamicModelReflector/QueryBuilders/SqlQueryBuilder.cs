@@ -1,8 +1,10 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
 using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Interfaces;
+using Business.DynamicModelReflector.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -14,6 +16,11 @@ namespace Business.DynamicModelReflector.QueryBuilders
     public class SqlQueryBuilder : ExpressionVisitor, IQueryBuilder
     {
         #region Fields
+        /// <summary>
+        /// DataOperationsHelper injection.
+        /// </summary>
+        IDataOperationHelper _dataOperationHelper;
+
         /// <summary>
         /// Condition StringBuilder.
         /// </summary>
@@ -38,6 +45,13 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// When variables are pushed through the expressions it will be caught in variableName.
         /// </summary>
         string _variableName = string.Empty;
+        #endregion
+
+        #region Constructors
+        public SqlQueryBuilder(IDataOperationHelper dataOperationHelper)
+        {
+            _dataOperationHelper = dataOperationHelper;
+        }
         #endregion
 
         #region Public Methods
@@ -188,25 +202,27 @@ namespace Business.DynamicModelReflector.QueryBuilders
             {
                 StringBuilder stringBuilder = new(" \n(");
 
-                PropertyInfo[] propertyInfos = typeof(TModel).GetProperties();
+                List<PropertyInfo> propertyInfos = typeof(TModel).GetProperties().ToList();
 
-                for (int i = 0; i < propertyInfos.Length; i++)
+                RemoveIdentityColumns(_dataOperationHelper.GetPrimaryKeyInfo(typeof(TModel).Name), propertyInfos);
+
+                for (int i = 0; i < propertyInfos.Count; i++)
                 {
                     stringBuilder.Append($" {propertyInfos[i].Name}");
 
-                    if (i != propertyInfos.Length - 1)
+                    if (i != propertyInfos.Count - 1)
                         stringBuilder.Append(',');
                     else
                         stringBuilder.Append(") \nValues (");
                 }
 
-                for (int i = 0; i < propertyInfos.Length; i++)
+                for (int i = 0; i < propertyInfos.Count; i++)
                 {
                     GenerateSqlParameter(propertyInfos[i], model);
 
                     stringBuilder.Append($" @{propertyInfos[i].Name}{_parameters.Count - 1}");
 
-                    if (i != propertyInfos.Length - 1)
+                    if (i != propertyInfos.Count - 1)
                         stringBuilder.Append(',');
                 }
 
@@ -319,6 +335,22 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
         #region Private Methods
         /// <summary>
+        /// Removes the Identity columns from the objects Property info.
+        /// </summary>
+        /// <param name="primaryKeyInfo">Database table primary key information.</param>
+        /// <param name="propertyInfos">Objects property info.</param>
+        private void RemoveIdentityColumns(List<PrimaryKeyInfo> primaryKeyInfo, List<PropertyInfo> propertyInfos)
+        {
+            foreach (PrimaryKeyInfo primaryKeyInformation in primaryKeyInfo)
+                if (primaryKeyInformation.IsIdentity)
+                {
+                    PropertyInfo? propertyInfo = propertyInfos.FirstOrDefault(pi => pi.Name == primaryKeyInformation.ColumnName);
+                    if (propertyInfo != null)
+                        propertyInfos.Remove(propertyInfo);
+                }
+        }
+
+        /// <summary>
         /// Retrieves the value of a specified variable from a given object using reflection.
         /// </summary>
         /// <param name="nodeValue">The object from which to extract the variable's value.</param>
@@ -343,7 +375,16 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// <param name="model">Poco object.</param>
         private void GenerateSqlParameter<TModel>(PropertyInfo propertyInfo, TModel model) where TModel : class, new()
         {
-            object value = propertyInfo.GetValue(model) ?? DBNull.Value;
+            PrimaryKeyInfo? primaryKeyInfo = _dataOperationHelper.GetPrimaryKeyInfo(typeof(TModel).Name)
+                .FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name);
+
+            if (primaryKeyInfo?.IsIdentity == true)
+                return;
+
+            object value = primaryKeyInfo == null
+                ? propertyInfo.GetValue(model) ?? DBNull.Value
+                : _dataOperationHelper.GetNextIdForInsert(typeof(TModel).Name);
+
 
             if (propertyInfo.PropertyType == typeof(string) ||
                 propertyInfo.PropertyType == typeof(DateTime) ||
@@ -454,6 +495,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
                 joinCondition.Body is UnaryExpression unary && unary.NodeType == ExpressionType.Convert ?
                     unary.Operand.ToString().Split('.').Last()
                         : throw new Exception("Expression is in the wrong format.");
+
         /// <summary>
         /// Retrieves the Forgein table name from the Forgein keys attribute in the POCO Model.
         /// </summary>
