@@ -36,7 +36,7 @@ namespace Business.DynamicModelReflector.Helpers
         #endregion
 
         #region Public Methods
-        public List<PrimaryKeyInfo> GetPrimaryKeyInfo(string tableName)
+        public List<PrimaryKeyInfo> RetrievePrimaryKeyInfo(string tableName)
         {
             List<PrimaryKeyInfo> primaryKeyInfoList = new();
 
@@ -79,7 +79,7 @@ namespace Business.DynamicModelReflector.Helpers
             return primaryKeyInfoList;
         }
 
-        public int GetNextIdForInsert(string tableName)
+        public int GenerateNextId(string tableName)
         {
             using (SqlConnection connection = CreateConnection())
             {

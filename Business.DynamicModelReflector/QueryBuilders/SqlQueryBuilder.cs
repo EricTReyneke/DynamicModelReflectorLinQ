@@ -207,7 +207,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
                 List<PropertyInfo> propertyInfos = typeof(TModel).GetProperties().ToList();
 
-                _primaryKeyInfos = _dataOperationHelper.GetPrimaryKeyInfo(typeof(TModel).Name);
+                _primaryKeyInfos = _dataOperationHelper.RetrievePrimaryKeyInfo(typeof(TModel).Name);
 
                 RemoveIdentityColumns(propertyInfos);
 
@@ -384,7 +384,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
             object value = primaryKeyInfo == null && primaryKeyInfo?.DataType != true
                 ? propertyInfo.GetValue(model) ?? DBNull.Value
-                : _dataOperationHelper.GetNextIdForInsert(typeof(TModel).Name);
+                : _dataOperationHelper.GenerateNextId(typeof(TModel).Name);
 
 
             if (propertyInfo.PropertyType == typeof(string) ||

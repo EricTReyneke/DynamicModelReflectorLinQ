@@ -9,13 +9,13 @@ namespace Business.DynamicModelReflector.Interfaces
         /// </summary>
         /// <param name="tableName">Database table name.</param>
         /// <returns>List of table data.</returns>
-        List<PrimaryKeyInfo> GetPrimaryKeyInfo(string tableName);
+        List<PrimaryKeyInfo> RetrievePrimaryKeyInfo(string tableName);
 
         /// <summary>
         /// Retrieves the last Id of a table and increments it with one.
         /// </summary>
         /// <param name="tableName">Database Table name.</param>
         /// <returns>Id incremented by one.</returns>
-        int GetNextIdForInsert(string tableName);
+        int GenerateNextId(string tableName);
     }
 }
