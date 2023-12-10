@@ -1,6 +1,5 @@
 ﻿using Business.DynamicModelReflector.Data.Model;
 using Business.DynamicModelReflector.DataOperations;
-using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Helpers;
 using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.ModelReflectors;
@@ -16,7 +15,6 @@ namespace DynamicModelGeneratorLinq
 
             TestIdentity testIdentity = new()
             {
-                Id = 7,
                 Lekker = "Lekker"
             };
 

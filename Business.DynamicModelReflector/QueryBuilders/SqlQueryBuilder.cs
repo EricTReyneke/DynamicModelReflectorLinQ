@@ -1,10 +1,8 @@
-﻿using Business.DynamicModelReflector.Data.Model;
-using Business.DynamicModelReflector.Enums;
+﻿using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -45,6 +43,11 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// When variables are pushed through the expressions it will be caught in variableName.
         /// </summary>
         string _variableName = string.Empty;
+
+        /// <summary>
+        /// Stores the Primary key information for create fuctions.
+        /// </summary>
+        List<PrimaryKeyInfo> _primaryKeyInfos;
         #endregion
 
         #region Constructors
@@ -204,7 +207,9 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
                 List<PropertyInfo> propertyInfos = typeof(TModel).GetProperties().ToList();
 
-                RemoveIdentityColumns(_dataOperationHelper.GetPrimaryKeyInfo(typeof(TModel).Name), propertyInfos);
+                _primaryKeyInfos = _dataOperationHelper.GetPrimaryKeyInfo(typeof(TModel).Name);
+
+                RemoveIdentityColumns(propertyInfos);
 
                 for (int i = 0; i < propertyInfos.Count; i++)
                 {
@@ -339,9 +344,9 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// </summary>
         /// <param name="primaryKeyInfo">Database table primary key information.</param>
         /// <param name="propertyInfos">Objects property info.</param>
-        private void RemoveIdentityColumns(List<PrimaryKeyInfo> primaryKeyInfo, List<PropertyInfo> propertyInfos)
+        private void RemoveIdentityColumns(List<PropertyInfo> propertyInfos)
         {
-            foreach (PrimaryKeyInfo primaryKeyInformation in primaryKeyInfo)
+            foreach (PrimaryKeyInfo primaryKeyInformation in _primaryKeyInfos)
                 if (primaryKeyInformation.IsIdentity)
                 {
                     PropertyInfo? propertyInfo = propertyInfos.FirstOrDefault(pi => pi.Name == primaryKeyInformation.ColumnName);
@@ -375,13 +380,9 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// <param name="model">Poco object.</param>
         private void GenerateSqlParameter<TModel>(PropertyInfo propertyInfo, TModel model) where TModel : class, new()
         {
-            PrimaryKeyInfo? primaryKeyInfo = _dataOperationHelper.GetPrimaryKeyInfo(typeof(TModel).Name)
-                .FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name);
+            PrimaryKeyInfo? primaryKeyInfo = _primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name);
 
-            if (primaryKeyInfo?.IsIdentity == true)
-                return;
-
-            object value = primaryKeyInfo == null
+            object value = primaryKeyInfo == null && primaryKeyInfo?.DataType != true
                 ? propertyInfo.GetValue(model) ?? DBNull.Value
                 : _dataOperationHelper.GetNextIdForInsert(typeof(TModel).Name);
 
