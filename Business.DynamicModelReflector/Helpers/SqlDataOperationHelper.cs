@@ -38,9 +38,11 @@ namespace Business.DynamicModelReflector.Helpers
         #region Public Methods
         public List<PrimaryKeyInfo> RetrievePrimaryKeyInfo(string tableName)
         {
-            List<PrimaryKeyInfo> primaryKeyInfoList = new();
+            try
+            {
+                List<PrimaryKeyInfo> primaryKeyInfoList = new();
 
-            string query = @"
+                string query = @"
             SELECT 
                 t.name AS TableName,
                 c.name AS ColumnName,
@@ -60,41 +62,46 @@ namespace Business.DynamicModelReflector.Helpers
                 i.is_primary_key = 1
                 AND t.name = @TableName";
 
-            using (SqlConnection connection = CreateConnection())
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@TableName", tableName);
+                using (SqlConnection connection = CreateConnection())
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@TableName", tableName);
 
-                using (SqlDataReader reader = command.ExecuteReader())
-                    while (reader.Read())
-                        primaryKeyInfoList.Add(new PrimaryKeyInfo
-                        {
-                            TableName = reader["TableName"].ToString(),
-                            ColumnName = reader["ColumnName"].ToString(),
-                            DataType = IsIntegerType(reader["DataType"].ToString()),
-                            IsIdentity = (bool)reader["IsIdentity"]
-                        });
+                    using (SqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
+                            primaryKeyInfoList.Add(new PrimaryKeyInfo
+                            {
+                                TableName = reader["TableName"].ToString(),
+                                ColumnName = reader["ColumnName"].ToString(),
+                                DataType = IsIntegerType(reader["DataType"].ToString()),
+                                IsIdentity = (bool)reader["IsIdentity"]
+                            });
+                }
+
+                return primaryKeyInfoList;
             }
-
-            return primaryKeyInfoList;
+            catch
+            {
+                throw;
+            }
         }
 
         public int GenerateNextId(string tableName)
         {
-            using (SqlConnection connection = CreateConnection())
+            try
             {
-                using (SqlCommand command = new($"SELECT MAX(Id) FROM {tableName}", connection))
+                using (SqlConnection connection = CreateConnection())
                 {
-                    try
+                    using (SqlCommand command = new($"SELECT MAX(Id) FROM {tableName}", connection))
                     {
                         object result = command.ExecuteScalar();
                         return (result != DBNull.Value && result != null) ? Convert.ToInt32(result) + 1 : 1;
                     }
-                    catch
-                    {
-                        throw;
-                    }
                 }
+            }
+            catch
+            {
+                throw;
             }
         }
         #endregion

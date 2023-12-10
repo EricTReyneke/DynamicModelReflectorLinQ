@@ -58,17 +58,8 @@ namespace Business.DynamicModelReflector.QueryBuilders
         #endregion
 
         #region Public Methods
-        public string AddAllColumnsIntoSelect<TModel>() where TModel : class, new()
-        {
-            try
-            {
-                return AddAllTableColumns<TModel>();
-            }
-            catch
-            {
-                throw;
-            }
-        }
+        public string AddAllColumnsIntoSelect<TModel>() where TModel : class, new() =>
+            AddAllTableColumns<TModel>();
 
         public string BuildSelectConditions<TModel>(params Expression<Func<TModel, object>>[] selectCondition)
         {
@@ -440,20 +431,27 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// <returns>String of all properties in the model as table Columns.</returns>
         private string AddAllTableColumns<TModel>(Type modelType = null)
         {
-            modelType ??= typeof(TModel);
-
-            StringBuilder stringBuilder = new();
-            string modelName = modelType.Name;
-
-            foreach (PropertyInfo propertyInfo in modelType.GetProperties())
+            try
             {
-                if (modelType.GetProperty(propertyInfo.Name).IsDefined(typeof(IgnoreDataMemberAttribute), false))
-                    continue;
+                modelType ??= typeof(TModel);
 
-                stringBuilder.Append($" {modelName}.{propertyInfo.Name},");
+                StringBuilder stringBuilder = new();
+                string modelName = modelType.Name;
+
+                foreach (PropertyInfo propertyInfo in modelType.GetProperties())
+                {
+                    if (modelType.GetProperty(propertyInfo.Name).IsDefined(typeof(IgnoreDataMemberAttribute), false))
+                        continue;
+
+                    stringBuilder.Append($" {modelName}.{propertyInfo.Name},");
+                }
+
+                return stringBuilder.ToString().TrimEnd(',');
             }
-
-            return stringBuilder.ToString().TrimEnd(',');
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
