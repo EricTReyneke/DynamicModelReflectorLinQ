@@ -72,7 +72,8 @@ namespace Business.DynamicModelReflector.Interfaces
         /// </summary>
         /// <typeparam name="TModel">Generic POCO Model.</typeparam>
         /// <param name="model">Poco Model Object.</param>
-        string BuildInsertConditions<TModel>(TModel model) where TModel : class, new();
+        /// <param name="idOffset">Offset to be applied to the ID, if applicable.</param>
+        string BuildInsertConditions<TModel>(TModel model, int idOffset) where TModel : class, new();
 
         /// <summary>
         /// Build the GroupBy conditions.

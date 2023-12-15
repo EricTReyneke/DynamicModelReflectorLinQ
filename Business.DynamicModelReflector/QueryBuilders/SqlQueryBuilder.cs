@@ -177,7 +177,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
                 for (int i = 0; i < propertyInfos.Length; i++)
                 {
-                    GenerateSqlParameter(propertyInfos[i], model);
+                    GenerateUpdateSqlParameter(propertyInfos[i], model);
 
                     stringBuilder.Append($" {propertyInfos[i].Name} = @{propertyInfos[i].Name}{_parameters.Count - 1},");
                 }
@@ -190,11 +190,11 @@ namespace Business.DynamicModelReflector.QueryBuilders
             }
         }
 
-        public string BuildInsertConditions<TModel>(TModel model) where TModel : class, new()
+        public string BuildInsertConditions<TModel>(TModel model, int idOffset) where TModel : class, new()
         {
             try
             {
-                StringBuilder stringBuilder = new(" \n(");
+                StringBuilder stringBuilder = new(" (");
 
                 List<PropertyInfo> propertyInfos = typeof(TModel).GetProperties().ToList();
 
@@ -209,12 +209,12 @@ namespace Business.DynamicModelReflector.QueryBuilders
                     if (i != propertyInfos.Count - 1)
                         stringBuilder.Append(',');
                     else
-                        stringBuilder.Append(") \nValues (");
+                        stringBuilder.Append(") Values (");
                 }
 
                 for (int i = 0; i < propertyInfos.Count; i++)
                 {
-                    GenerateSqlParameter(propertyInfos[i], model);
+                    GenerateInsertSqlParameter(propertyInfos[i], model, idOffset);
 
                     stringBuilder.Append($" @{propertyInfos[i].Name}{_parameters.Count - 1}");
 
@@ -356,7 +356,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// This method uses reflection to access private and public fields of the object.
         /// It is intended for scenarios where accessing internal object state is necessary, such as debugging or logging. Caution is advised due to potential performance impacts and breaking of encapsulation principles.
         /// </remarks>
-        private object GetClosureVariableValue(object nodeValue, string variableName) =>
+        private object? GetClosureVariableValue(object nodeValue, string variableName) =>
                  nodeValue.GetType()
                 .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(field => field.Name == variableName)
@@ -364,31 +364,67 @@ namespace Business.DynamicModelReflector.QueryBuilders
                 .FirstOrDefault();
 
         /// <summary>
-        /// Generates SqlParameters and adds them to a list of SqlParameters.
+        /// Generates a SqlParameter for a given property of a POCO and adds it to a list of SqlParameters.
         /// </summary>
-        /// <typeparam name="TModel">Generic Poco.</typeparam>
-        /// <param name="propertyInfo">Specified Property info.</param>
-        /// <param name="model">Poco object.</param>
-        private void GenerateSqlParameter<TModel>(PropertyInfo propertyInfo, TModel model) where TModel : class, new()
+        /// <typeparam name="TModel">Generic POCO type.</typeparam>
+        /// <param name="propertyInfo">Property information of the POCO.</param>
+        /// <param name="model">Instance of the POCO.</param>
+        /// <param name="idOffset">Offset to be applied to the ID, if applicable.</param>
+        private void GenerateInsertSqlParameter<TModel>(PropertyInfo propertyInfo, TModel model, int idOffset) where TModel : class, new()
+        {
+            object? value = DetermineValueForProperty(propertyInfo, model, idOffset);
+            SqlParameter parameter = CreateSqlParameter(propertyInfo, value);
+            _parameters.Add(parameter);
+        }
+
+        /// <summary>
+        /// Generates a SqlParameter for a given property of a POCO and adds it to a list of SqlParameters.
+        /// </summary>
+        /// <typeparam name="TModel">Generic POCO type.</typeparam>
+        /// <param name="propertyInfo">Property information of the POCO.</param>
+        /// <param name="model">Instance of the POCO.</param>
+        /// <param name="idOffset">Offset to be applied to the ID, if applicable.</param>
+        private void GenerateUpdateSqlParameter<TModel>(PropertyInfo propertyInfo, TModel model) where TModel : class, new()
+        {
+            object? value = HandleNullableTypes(propertyInfo, model);
+            SqlParameter parameter = CreateSqlParameter(propertyInfo, value);
+            _parameters.Add(parameter);
+        }
+
+        /// <summary>
+        /// Determines the value for a given property, considering primary key information and handling nullable types.
+        /// </summary>
+        private object? DetermineValueForProperty<TModel>(PropertyInfo propertyInfo, TModel model, int idOffset) where TModel : class, new()
         {
             PrimaryKeyInfo? primaryKeyInfo = _primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name);
 
-            object value = primaryKeyInfo == null && primaryKeyInfo?.DataType != true
-                ? propertyInfo.GetValue(model) ?? DBNull.Value
-                : _dataOperationHelper.GenerateNextId(typeof(TModel).Name);
+            if (primaryKeyInfo == null)
+                return HandleNullableTypes(propertyInfo, model);
 
+            return _dataOperationHelper.GenerateNextId(typeof(TModel).Name) + idOffset;
+        }
 
-            if (propertyInfo.PropertyType == typeof(string) ||
-                propertyInfo.PropertyType == typeof(DateTime) ||
-                Nullable.GetUnderlyingType(propertyInfo.PropertyType) == typeof(DateTime) ||
-                Nullable.GetUnderlyingType(propertyInfo.PropertyType) == typeof(string))
+        /// <summary>
+        /// Handles nullable types for a given property.
+        /// </summary>
+        private object? HandleNullableTypes<TModel>(PropertyInfo propertyInfo, TModel model) where TModel : class, new()
+        {
+            Type? underlyingType = Nullable.GetUnderlyingType(propertyInfo.PropertyType);
+
+            if (underlyingType != null)
             {
-                _parameters.Add(new SqlParameter($"@{propertyInfo.Name}{_parameters.Count}", value));
-                return;
+                object? value = propertyInfo.GetValue(model);
+                return value ?? DBNull.Value;
             }
 
-            _parameters.Add(new SqlParameter($"@{propertyInfo.Name}{_parameters.Count}", value));
+            return propertyInfo.GetValue(model);
         }
+
+        /// <summary>
+        /// Creates a new SqlParameter based on the property information and its value.
+        /// </summary>
+        private SqlParameter CreateSqlParameter(PropertyInfo propertyInfo, object value) =>
+            new SqlParameter($"@{propertyInfo.Name}{_parameters.Count}", value);
 
         /// <summary>
         /// Adds all the columns from the foreign key table into the select statement.

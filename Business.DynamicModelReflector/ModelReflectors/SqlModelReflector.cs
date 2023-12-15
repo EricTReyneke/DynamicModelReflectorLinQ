@@ -106,7 +106,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
             try
             {
                 StringBuilder buildLoadQuery = new();
-                buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(model)}");
+                buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(model, 0)}");
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
                 return new SqlExecutable<TModel>(sqlContext);
             }
@@ -127,9 +127,9 @@ namespace Business.DynamicModelReflector.ModelReflectors
 
                 for (int i = 0; i < listLen; i++)
                     if(i != listLen - 1)
-                        buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(models.ToList()[i])}\n");
+                        buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(models.ToList()[i], i)}\n");
                     else
-                        buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(models.ToList()[i])}");
+                        buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(models.ToList()[i], i)}");
 
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, models);
                 return new SqlExecutable<TModel>(sqlContext);

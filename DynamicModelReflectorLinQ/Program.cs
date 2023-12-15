@@ -13,9 +13,12 @@ namespace DynamicModelGeneratorLinq
         {
             IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder(new SqlDataOperationHelper()));
 
-            TestIdentity testIdentity = new()
+            IEnumerable<Lekker> testIdentity = new List<Lekker>()
             {
-                Lekker = "Lekker"
+                new Lekker() { Lekker1 = "Lekker5" },
+                new Lekker() { Lekker1 = "Lekker6" },
+                new Lekker() { Lekker1 = "Lekker7" },
+                new Lekker() { Lekker1 = "Lekker8" },
             };
 
             sqlModelReflector
