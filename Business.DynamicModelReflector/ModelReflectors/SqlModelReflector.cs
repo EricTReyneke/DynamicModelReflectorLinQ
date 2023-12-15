@@ -2,8 +2,6 @@
 using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Factories;
 using Business.DynamicModelReflector.Interfaces;
-using System.Collections;
-using System.Reflection;
 using System.Text;
 
 namespace Business.DynamicModelReflector.ModelReflectors
@@ -40,6 +38,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         {
             try
             {
+                ClearParameterList();
                 StringBuilder buildLoadQuery = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
                 buildLoadQuery.Append($"Select{_queryBuilder.AddAllColumnsIntoSelect<TModel>()} \nFrom {typeof(TModel).Name} ");
@@ -56,6 +55,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         {
             try
             {
+                ClearParameterList();
                 StringBuilder buildLoadQuery = new();
                 TModel model = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, models);
@@ -73,6 +73,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         {
             try
             {
+                ClearParameterList();
                 StringBuilder buildLoadQuery = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
                 buildLoadQuery.Append($"Delete {typeof(TModel).Name} ");
@@ -89,6 +90,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         {
             try
             {
+                ClearParameterList();
                 StringBuilder buildLoadQuery = new();
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
                 buildLoadQuery.Append($"Update {typeof(TModel).Name} {_queryBuilder.BuildUpdateSetConditions(model)}");
@@ -105,6 +107,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         {
             try
             {
+                ClearParameterList();
                 StringBuilder buildLoadQuery = new();
                 buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(model, 0)}");
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
@@ -121,6 +124,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         {
             try
             {
+                ClearParameterList();
                 StringBuilder buildLoadQuery = new();
 
                 int listLen = models.Count();
@@ -178,6 +182,12 @@ namespace Business.DynamicModelReflector.ModelReflectors
                 StringBuilder = stringBuilder
             };
         }
+
+        /// <summary>
+        /// Clears SqlParameter list before new query execution.
+        /// </summary>
+        private void ClearParameterList() =>
+            _queryBuilder.GetParameters().Clear();
         #endregion
     }
 }

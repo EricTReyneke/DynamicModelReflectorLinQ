@@ -13,16 +13,14 @@ namespace DynamicModelGeneratorLinq
         {
             IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder(new SqlDataOperationHelper()));
 
-            IEnumerable<Lekker> testIdentity = new List<Lekker>()
+            Lekker lekker = new()
             {
-                new Lekker() { Lekker1 = "Lekker5" },
-                new Lekker() { Lekker1 = "Lekker6" },
-                new Lekker() { Lekker1 = "Lekker7" },
-                new Lekker() { Lekker1 = "Lekker8" },
+
             };
 
             sqlModelReflector
-                .Create(testIdentity)
+                .Update(lekker)
+                .Where(lekker => lekker.Id == 0)
                 .Execute();
         }
     }

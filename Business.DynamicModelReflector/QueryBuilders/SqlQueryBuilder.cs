@@ -51,10 +51,8 @@ namespace Business.DynamicModelReflector.QueryBuilders
         #endregion
 
         #region Constructors
-        public SqlQueryBuilder(IDataOperationHelper dataOperationHelper)
-        {
+        public SqlQueryBuilder(IDataOperationHelper dataOperationHelper) =>
             _dataOperationHelper = dataOperationHelper;
-        }
         #endregion
 
         #region Public Methods
@@ -89,7 +87,6 @@ namespace Business.DynamicModelReflector.QueryBuilders
             try
             {
                 _condition.Clear();
-                _parameters.Clear();
                 _propertyParameterName = string.Empty;
                 TModel model = new();
                 _pocoModelName = model.GetType().Name;
@@ -171,15 +168,18 @@ namespace Business.DynamicModelReflector.QueryBuilders
         {
             try
             {
-                StringBuilder stringBuilder = new(" \nSet");
+                StringBuilder stringBuilder = new StringBuilder(" \nSet");
 
                 PropertyInfo[] propertyInfos = typeof(TModel).GetProperties();
 
-                for (int i = 0; i < propertyInfos.Length; i++)
+                foreach (var propertyInfo in propertyInfos)
                 {
-                    GenerateUpdateSqlParameter(propertyInfos[i], model);
-
-                    stringBuilder.Append($" {propertyInfos[i].Name} = @{propertyInfos[i].Name}{_parameters.Count - 1},");
+                    var value = propertyInfo.GetValue(model);
+                    if (IsPropertySet(propertyInfo, value))
+                    {
+                        GenerateUpdateSqlParameter(propertyInfo, model);
+                        stringBuilder.Append($" {propertyInfo.Name} = @{propertyInfo.Name}{_parameters.Count - 1},");
+                    }
                 }
 
                 return stringBuilder.ToString().TrimEnd(',');
@@ -425,6 +425,24 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// </summary>
         private SqlParameter CreateSqlParameter(PropertyInfo propertyInfo, object value) =>
             new SqlParameter($"@{propertyInfo.Name}{_parameters.Count}", value);
+
+        /// <summary>
+        /// Validates if a proeprty needs to be updated.
+        /// </summary>
+        /// <param name="propertyInfo">Objects property info.</param>
+        /// <param name="value">Property info value.</param>
+        /// <returns>true of false.</returns>
+        private bool IsPropertySet(PropertyInfo propertyInfo, object value)
+        {
+            if (value == null)
+                return false;
+
+            Type type = propertyInfo.PropertyType;
+            if (type.IsValueType)
+                return !Equals(value, Activator.CreateInstance(type));
+
+            return true;
+        }
 
         /// <summary>
         /// Adds all the columns from the foreign key table into the select statement.
