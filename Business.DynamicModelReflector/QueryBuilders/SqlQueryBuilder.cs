@@ -190,7 +190,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
             }
         }
 
-        public string BuildInsertConditions<TModel>(TModel model, int idOffset) where TModel : class, new()
+        public Dictionary<string, ICollection<PrimaryKeyInfo>> BuildInsertConditions<TModel>(TModel model, int idOffset) where TModel : class, new()
         {
             try
             {
@@ -200,7 +200,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
                 _primaryKeyInfos = _dataOperationHelper.RetrievePrimaryKeyInfo(typeof(TModel).Name);
 
-                RemoveIdentityColumns(propertyInfos);
+                RemoveIdentityColumns(propertyInfos, idOffset);
 
                 for (int i = 0; i < propertyInfos.Count; i++)
                 {
@@ -224,7 +224,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
                 stringBuilder.Append(')');
 
-                return stringBuilder.ToString();
+                return new Dictionary<string, ICollection<PrimaryKeyInfo>> { { stringBuilder.ToString(), _primaryKeyInfos } };
             }
             catch
             {
@@ -335,11 +335,14 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// </summary>
         /// <param name="primaryKeyInfo">Database table primary key information.</param>
         /// <param name="propertyInfos">Objects property info.</param>
-        private void RemoveIdentityColumns(List<PropertyInfo> propertyInfos)
+        private void RemoveIdentityColumns(List<PropertyInfo> propertyInfos, int idOffset)
         {
             foreach (PrimaryKeyInfo primaryKeyInformation in _primaryKeyInfos)
                 if (primaryKeyInformation.IsIdentity)
                 {
+                    if (primaryKeyInformation.InsertedValue is int currentValue)
+                        primaryKeyInformation.InsertedValue = currentValue + idOffset;
+
                     PropertyInfo? propertyInfo = propertyInfos.FirstOrDefault(pi => pi.Name == primaryKeyInformation.ColumnName);
                     if (propertyInfo != null)
                         propertyInfos.Remove(propertyInfo);
@@ -398,7 +401,11 @@ namespace Business.DynamicModelReflector.QueryBuilders
             if (_primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name) == null)
                 return HandleNullableTypes(propertyInfo, model);
 
-            return _dataOperationHelper.GenerateNextId(typeof(TModel).Name) + idOffset;
+            object value = _dataOperationHelper.GenerateNextId(typeof(TModel).Name) + idOffset;
+
+            _primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name).InsertedValue = value;
+
+            return value;
         }
 
         /// <summary>

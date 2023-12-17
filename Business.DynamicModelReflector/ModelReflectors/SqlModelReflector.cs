@@ -2,6 +2,9 @@
 using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Factories;
 using Business.DynamicModelReflector.Interfaces;
+using Business.DynamicModelReflector.Models;
+using System.Net;
+using System.Reflection;
 using System.Text;
 
 namespace Business.DynamicModelReflector.ModelReflectors
@@ -109,8 +112,10 @@ namespace Business.DynamicModelReflector.ModelReflectors
             {
                 ClearParameterList();
                 StringBuilder buildLoadQuery = new();
-                buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(model, 0)}");
+                KeyValuePair<string, ICollection<PrimaryKeyInfo>> insertQueryWithPrimaryKey = _queryBuilder.BuildInsertConditions(model, 0).FirstOrDefault();
+                buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {insertQueryWithPrimaryKey.Key}");
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
+                sqlContext.PrimaryKeyCreationTracker = insertQueryWithPrimaryKey.Value;
                 return new SqlExecutable<TModel>(sqlContext);
             }
             catch (Exception ex)
@@ -125,17 +130,28 @@ namespace Business.DynamicModelReflector.ModelReflectors
             try
             {
                 ClearParameterList();
-                StringBuilder buildLoadQuery = new();
-
-                int listLen = models.Count();
+                StringBuilder buildLoadQuery = new StringBuilder();
+                ICollection<PrimaryKeyInfo> primaryKeyInfos = new List<PrimaryKeyInfo>();
+                List<TModel> modelsList = models.ToList();
+                int listLen = modelsList.Count;
 
                 for (int i = 0; i < listLen; i++)
-                    if(i != listLen - 1)
-                        buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(models.ToList()[i], i)}\n");
-                    else
-                        buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {_queryBuilder.BuildInsertConditions(models.ToList()[i], i)}");
+                {
+                    KeyValuePair<string, ICollection<PrimaryKeyInfo>> insertQueryWithPrimaryKey =
+                        _queryBuilder.BuildInsertConditions(modelsList[i], i).FirstOrDefault();
+
+                    if (insertQueryWithPrimaryKey.Value != null)
+                        foreach (PrimaryKeyInfo primaryKeyInfo in insertQueryWithPrimaryKey.Value)
+                            primaryKeyInfos.Add(primaryKeyInfo);
+
+                    buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {insertQueryWithPrimaryKey.Key}");
+
+                    if (i != listLen - 1)
+                        buildLoadQuery.Append("\n");
+                }
 
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, models);
+                sqlContext.PrimaryKeyCreationTracker = primaryKeyInfos;
                 return new SqlExecutable<TModel>(sqlContext);
             }
             catch (Exception ex)

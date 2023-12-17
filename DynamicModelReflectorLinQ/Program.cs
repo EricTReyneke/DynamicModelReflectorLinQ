@@ -3,6 +3,7 @@ using Business.DynamicModelReflector.DataOperations;
 using Business.DynamicModelReflector.Helpers;
 using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.ModelReflectors;
+using Business.DynamicModelReflector.Models;
 using Business.DynamicModelReflector.QueryBuilders;
 
 namespace DynamicModelGeneratorLinq
@@ -13,13 +14,12 @@ namespace DynamicModelGeneratorLinq
         {
             IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder(new SqlDataOperationHelper()));
 
-            Lekker lekker = new()
-            {
-                Id = 0,
-                Lekker1 = null
-            };
+            ICollection<Lekker> lekker = new List<Lekker>();
 
-            sqlModelReflector
+            for (int i = 0; i < 1000; i++)
+                lekker.Add(new Lekker() { Lekker1 = $"Lekker{i}" });
+
+            ICollection<PrimaryKeyInfo> myMaat = sqlModelReflector
                 .Create(lekker)
                 .Execute();
         }

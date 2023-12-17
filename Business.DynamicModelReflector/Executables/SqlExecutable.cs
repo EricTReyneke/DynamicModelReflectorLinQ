@@ -1,4 +1,5 @@
 ﻿using Business.DynamicModelReflector.Interfaces;
+using Business.DynamicModelReflector.Models;
 using Newtonsoft.Json;
 using System.Data;
 using System.Reflection;
@@ -27,7 +28,7 @@ namespace Business.DynamicModelReflector.Executables
         #endregion
 
         #region Public Methods
-        public void Execute()
+        public ICollection<PrimaryKeyInfo> Execute()
         {
             switch (_context.StringBuilder?.ToString().Split(' ')[0].ToLower())
             {
@@ -46,6 +47,8 @@ namespace Business.DynamicModelReflector.Executables
                 default:
                     throw new Exception($"The query: \"{_context.StringBuilder}\" is not supported.");
             }
+
+            return _context.PrimaryKeyCreationTracker;
         }
         #endregion
 

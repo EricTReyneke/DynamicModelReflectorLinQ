@@ -3,6 +3,7 @@ using Business.DynamicModelReflector.Models;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Security.Principal;
 
 namespace Business.DynamicModelReflector.Helpers
 {
@@ -40,14 +41,15 @@ namespace Business.DynamicModelReflector.Helpers
         {
             try
             {
-                List<PrimaryKeyInfo> primaryKeyInfoList = new();
+                List<PrimaryKeyInfo> primaryKeyInfoList = new List<PrimaryKeyInfo>();
 
                 string query = @"
             SELECT 
                 t.name AS TableName,
                 c.name AS ColumnName,
                 ty.name AS DataType,
-                c.is_identity AS IsIdentity
+                c.is_identity AS IsIdentity,
+                idc.last_value AS LastPrimaryKeyValue
             FROM 
                 sys.tables t
             INNER JOIN 
@@ -58,6 +60,8 @@ namespace Business.DynamicModelReflector.Helpers
                 sys.columns c ON ic.object_id = c.object_id AND c.column_id = ic.column_id
             INNER JOIN 
                 sys.types ty ON c.user_type_id = ty.user_type_id
+            LEFT JOIN 
+                sys.identity_columns idc ON c.object_id = idc.object_id AND c.column_id = idc.column_id
             WHERE 
                 i.is_primary_key = 1
                 AND t.name = @TableName";
@@ -68,14 +72,26 @@ namespace Business.DynamicModelReflector.Helpers
                     command.Parameters.AddWithValue("@TableName", tableName);
 
                     using (SqlDataReader reader = command.ExecuteReader())
+                    {
                         while (reader.Read())
+                        {
+                            bool isIdentity = (bool)reader["IsIdentity"];
+
+                            object lastPrimaryKeyValue = null;
+
+                            if (isIdentity)
+                                lastPrimaryKeyValue = reader["LastPrimaryKeyValue"] != DBNull.Value ? int.Parse(reader["LastPrimaryKeyValue"].ToString()) : 1;
+
                             primaryKeyInfoList.Add(new PrimaryKeyInfo
                             {
                                 TableName = reader["TableName"].ToString(),
                                 ColumnName = reader["ColumnName"].ToString(),
                                 DataType = IsIntegerType(reader["DataType"].ToString()),
-                                IsIdentity = (bool)reader["IsIdentity"]
+                                IsIdentity = isIdentity,
+                                InsertedValue = isIdentity ? lastPrimaryKeyValue : null,
                             });
+                        }
+                    }
                 }
 
                 return primaryKeyInfoList;

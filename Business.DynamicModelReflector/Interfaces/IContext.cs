@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Business.DynamicModelReflector.Models;
+using System.Text;
 
 namespace Business.DynamicModelReflector.Interfaces
 {
@@ -28,5 +29,10 @@ namespace Business.DynamicModelReflector.Interfaces
         /// IEnumerable of Poco Model Objects.
         /// </summary>
         IEnumerable<TModel> Models { get; set; }
+
+        /// <summary>
+        /// Tracks primary keys info inserted into the Database.
+        /// </summary>
+        public ICollection<PrimaryKeyInfo> PrimaryKeyCreationTracker { get; set; }
     }
 }

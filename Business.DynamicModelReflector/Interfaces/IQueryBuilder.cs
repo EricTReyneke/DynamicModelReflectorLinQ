@@ -1,5 +1,5 @@
-﻿using Business.DynamicModelReflector.Data.Model;
-using Business.DynamicModelReflector.Enums;
+﻿using Business.DynamicModelReflector.Enums;
+using Business.DynamicModelReflector.Models;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Text;
@@ -72,8 +72,8 @@ namespace Business.DynamicModelReflector.Interfaces
         /// </summary>
         /// <typeparam name="TModel">Generic POCO Model.</typeparam>
         /// <param name="model">Poco Model Object.</param>
-        /// <param name="idOffset">Offset to be applied to the ID, if applicable.</param>
-        string BuildInsertConditions<TModel>(TModel model, int idOffset) where TModel : class, new();
+        /// <param name="idOffset">Dictionary with the key being the insert query and the value being the ICollection of PrimaryKeyInfo.</param>
+        Dictionary<string, ICollection<PrimaryKeyInfo>> BuildInsertConditions<TModel>(TModel model, int idOffset) where TModel : class, new();
 
         /// <summary>
         /// Build the GroupBy conditions.
