@@ -15,12 +15,12 @@ namespace DynamicModelGeneratorLinq
 
             Lekker lekker = new()
             {
-
+                Id = 0,
+                Lekker1 = null
             };
 
             sqlModelReflector
-                .Update(lekker)
-                .Where(lekker => lekker.Id == 0)
+                .Create(lekker)
                 .Execute();
         }
     }

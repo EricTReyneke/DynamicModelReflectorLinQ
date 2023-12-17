@@ -172,9 +172,9 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
                 PropertyInfo[] propertyInfos = typeof(TModel).GetProperties();
 
-                foreach (var propertyInfo in propertyInfos)
+                foreach (PropertyInfo propertyInfo in propertyInfos)
                 {
-                    var value = propertyInfo.GetValue(model);
+                    object value = HandleNullableTypes(propertyInfo, model);
                     if (IsPropertySet(propertyInfo, value))
                     {
                         GenerateUpdateSqlParameter(propertyInfo, model);
@@ -383,7 +383,6 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// <typeparam name="TModel">Generic POCO type.</typeparam>
         /// <param name="propertyInfo">Property information of the POCO.</param>
         /// <param name="model">Instance of the POCO.</param>
-        /// <param name="idOffset">Offset to be applied to the ID, if applicable.</param>
         private void GenerateUpdateSqlParameter<TModel>(PropertyInfo propertyInfo, TModel model) where TModel : class, new()
         {
             object? value = HandleNullableTypes(propertyInfo, model);
@@ -396,12 +395,21 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// </summary>
         private object? DetermineValueForProperty<TModel>(PropertyInfo propertyInfo, TModel model, int idOffset) where TModel : class, new()
         {
-            PrimaryKeyInfo? primaryKeyInfo = _primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name);
-
-            if (primaryKeyInfo == null)
+            if (_primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name) == null)
                 return HandleNullableTypes(propertyInfo, model);
 
             return _dataOperationHelper.GenerateNextId(typeof(TModel).Name) + idOffset;
+        }
+
+        /// <summary>
+        /// Determines if a property is set, i.e., not its default value for value types, and not null for reference types.
+        /// </summary>
+        private bool IsPropertySet(PropertyInfo propertyInfo, object value)
+        {
+            if (propertyInfo.PropertyType.IsValueType && Nullable.GetUnderlyingType(propertyInfo.PropertyType) == null)
+                return !Equals(value, Activator.CreateInstance(propertyInfo.PropertyType));
+
+            return value != null;
         }
 
         /// <summary>
@@ -409,9 +417,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// </summary>
         private object? HandleNullableTypes<TModel>(PropertyInfo propertyInfo, TModel model) where TModel : class, new()
         {
-            Type? underlyingType = Nullable.GetUnderlyingType(propertyInfo.PropertyType);
-
-            if (underlyingType != null)
+            if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null)
             {
                 object? value = propertyInfo.GetValue(model);
                 return value ?? DBNull.Value;
@@ -425,24 +431,6 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// </summary>
         private SqlParameter CreateSqlParameter(PropertyInfo propertyInfo, object value) =>
             new SqlParameter($"@{propertyInfo.Name}{_parameters.Count}", value);
-
-        /// <summary>
-        /// Validates if a proeprty needs to be updated.
-        /// </summary>
-        /// <param name="propertyInfo">Objects property info.</param>
-        /// <param name="value">Property info value.</param>
-        /// <returns>true of false.</returns>
-        private bool IsPropertySet(PropertyInfo propertyInfo, object value)
-        {
-            if (value == null)
-                return false;
-
-            Type type = propertyInfo.PropertyType;
-            if (type.IsValueType)
-                return !Equals(value, Activator.CreateInstance(type));
-
-            return true;
-        }
 
         /// <summary>
         /// Adds all the columns from the foreign key table into the select statement.
