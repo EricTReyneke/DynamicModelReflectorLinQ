@@ -1,5 +1,6 @@
 ﻿using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.Models;
+using System.Data;
 using System.Text;
 
 namespace Business.DynamicModelReflector.Context
@@ -17,5 +18,7 @@ namespace Business.DynamicModelReflector.Context
         public IEnumerable<TModel> Models { get; set; }
 
         public ICollection<PrimaryKeyInfo> PrimaryKeyCreationTracker { get; set; } = new List<PrimaryKeyInfo>();
+
+        public DataTable DataTable { get; set; }
     }
 }

@@ -132,25 +132,9 @@ namespace Business.DynamicModelReflector.ModelReflectors
                 ClearParameterList();
                 StringBuilder buildLoadQuery = new StringBuilder();
                 ICollection<PrimaryKeyInfo> primaryKeyInfos = new List<PrimaryKeyInfo>();
-                List<TModel> modelsList = models.ToList();
-                int listLen = modelsList.Count;
-
-                for (int i = 0; i < listLen; i++)
-                {
-                    KeyValuePair<string, ICollection<PrimaryKeyInfo>> insertQueryWithPrimaryKey =
-                        _queryBuilder.BuildInsertConditions(modelsList[i], i).FirstOrDefault();
-
-                    if (insertQueryWithPrimaryKey.Value != null)
-                        foreach (PrimaryKeyInfo primaryKeyInfo in insertQueryWithPrimaryKey.Value)
-                            primaryKeyInfos.Add(primaryKeyInfo);
-
-                    buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {insertQueryWithPrimaryKey.Key}");
-
-                    if (i != listLen - 1)
-                        buildLoadQuery.Append("\n");
-                }
 
                 IContext<TModel> sqlContext = MapContext(buildLoadQuery, models);
+                sqlContext.DataTable = _queryBuilder.BuildBulkInsert(models);
                 sqlContext.PrimaryKeyCreationTracker = primaryKeyInfos;
                 return new SqlExecutable<TModel>(sqlContext);
             }

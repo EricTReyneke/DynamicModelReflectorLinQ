@@ -1,4 +1,5 @@
 ﻿using Business.DynamicModelReflector.Models;
+using System.Data;
 using System.Text;
 
 namespace Business.DynamicModelReflector.Interfaces
@@ -33,6 +34,8 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <summary>
         /// Tracks primary keys info inserted into the Database.
         /// </summary>
-        public ICollection<PrimaryKeyInfo> PrimaryKeyCreationTracker { get; set; }
+        ICollection<PrimaryKeyInfo> PrimaryKeyCreationTracker { get; set; }
+
+        DataTable DataTable { get; set; }
     }
 }

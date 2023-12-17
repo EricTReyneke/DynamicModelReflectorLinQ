@@ -101,6 +101,26 @@ namespace Business.DynamicModelReflector.DataOperations
                 throw;
             }
         }
+
+        public void BulkInsert<TModel>(DataTable dataTable)
+        {
+            using (SqlConnection connection = CreateConnection())
+            {
+                using (SqlBulkCopy bulkCopy = new(connection))
+                {
+                    bulkCopy.DestinationTableName = typeof(TModel).Name;
+
+                    try
+                    {
+                        bulkCopy.WriteToServer(dataTable);
+                    }
+                    catch
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Private Methods

@@ -2,6 +2,7 @@
 using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -48,6 +49,8 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// Stores the Primary key information for create fuctions.
         /// </summary>
         List<PrimaryKeyInfo> _primaryKeyInfos;
+
+        int _initialId = 0;
         #endregion
 
         #region Constructors
@@ -200,7 +203,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
                 _primaryKeyInfos = _dataOperationHelper.RetrievePrimaryKeyInfo(typeof(TModel).Name);
 
-                RemoveIdentityColumns(propertyInfos, idOffset);
+                //RemoveIdentityColumns(propertyInfos, idOffset);
 
                 for (int i = 0; i < propertyInfos.Count; i++)
                 {
@@ -214,7 +217,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
                 for (int i = 0; i < propertyInfos.Count; i++)
                 {
-                    GenerateInsertSqlParameter(propertyInfos[i], model, idOffset);
+                    //GenerateInsertSqlParameter(propertyInfos[i], model, idOffset);
 
                     stringBuilder.Append($" @{propertyInfos[i].Name}{_parameters.Count - 1}");
 
@@ -230,6 +233,24 @@ namespace Business.DynamicModelReflector.QueryBuilders
             {
                 throw;
             }
+        }
+
+        public DataTable BuildBulkInsert<TModel>(IEnumerable<TModel> models) where TModel : class, new()
+        {
+            DataTable dataTable = new();
+
+            List<PropertyInfo> propertyInfos = typeof(TModel).GetProperties().ToList();
+
+            _primaryKeyInfos = _dataOperationHelper.RetrievePrimaryKeyInfo(typeof(TModel).Name);
+
+            RemoveIdentityColumns(propertyInfos);
+
+            foreach (PropertyInfo prop in propertyInfos)
+                dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+            GenerateDataTable(models, dataTable);
+
+            return dataTable;
         }
 
         public List<SqlParameter> GetParameters() =>
@@ -330,18 +351,46 @@ namespace Business.DynamicModelReflector.QueryBuilders
         #endregion
 
         #region Private Methods
+        private void GenerateDataTable<TModel>(IEnumerable<TModel> models, DataTable dataTable) where TModel : class, new()
+        {
+            if (!ValidateIdentityColumns())
+                FindInitialId<TModel>();
+
+            int idOffset = 0;
+            foreach (TModel model in models)
+            {
+                object[] values = new object[dataTable.Columns.Count];
+                for (int i = 0; i < dataTable.Columns.Count; i++)
+                    values[i] = GenerateInsertValue(typeof(TModel).GetProperty(dataTable.Columns[i].ColumnName), model, idOffset);
+
+                dataTable.Rows.Add(values);
+                idOffset += 1;
+            }
+        }
+
+        private void FindInitialId<TModel>() =>
+            _initialId = _dataOperationHelper.GenerateNextId(typeof(TModel).Name);
+
+        private bool ValidateIdentityColumns()
+        {
+            foreach(PrimaryKeyInfo primaryKeyInfo in _primaryKeyInfos)
+                if(primaryKeyInfo.IsIdentity)
+                    return true;
+
+            return false;
+        }
+
         /// <summary>
         /// Removes the Identity columns from the objects Property info.
         /// </summary>
-        /// <param name="primaryKeyInfo">Database table primary key information.</param>
         /// <param name="propertyInfos">Objects property info.</param>
-        private void RemoveIdentityColumns(List<PropertyInfo> propertyInfos, int idOffset)
+        private void RemoveIdentityColumns(List<PropertyInfo> propertyInfos)
         {
             foreach (PrimaryKeyInfo primaryKeyInformation in _primaryKeyInfos)
                 if (primaryKeyInformation.IsIdentity)
                 {
-                    if (primaryKeyInformation.InsertedValue is int currentValue)
-                        primaryKeyInformation.InsertedValue = currentValue + idOffset;
+                    //if (primaryKeyInformation.InsertedValue is int currentValue)
+                    //    primaryKeyInformation.InsertedValue = currentValue + idOffset;
 
                     PropertyInfo? propertyInfo = propertyInfos.FirstOrDefault(pi => pi.Name == primaryKeyInformation.ColumnName);
                     if (propertyInfo != null)
@@ -373,12 +422,8 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// <param name="propertyInfo">Property information of the POCO.</param>
         /// <param name="model">Instance of the POCO.</param>
         /// <param name="idOffset">Offset to be applied to the ID, if applicable.</param>
-        private void GenerateInsertSqlParameter<TModel>(PropertyInfo propertyInfo, TModel model, int idOffset) where TModel : class, new()
-        {
-            object? value = DetermineValueForProperty(propertyInfo, model, idOffset);
-            SqlParameter parameter = CreateSqlParameter(propertyInfo, value);
-            _parameters.Add(parameter);
-        }
+        private object GenerateInsertValue<TModel>(PropertyInfo propertyInfo, TModel model, int idOffset) where TModel : class, new() =>
+            DetermineValueForProperty(propertyInfo, model, idOffset);
 
         /// <summary>
         /// Generates a SqlParameter for a given property of a POCO and adds it to a list of SqlParameters.
@@ -401,7 +446,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
             if (_primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name) == null)
                 return HandleNullableTypes(propertyInfo, model);
 
-            object value = _dataOperationHelper.GenerateNextId(typeof(TModel).Name) + idOffset;
+            object value = _initialId + idOffset;
 
             _primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name).InsertedValue = value;
 

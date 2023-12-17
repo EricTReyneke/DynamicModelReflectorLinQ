@@ -26,6 +26,8 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <param name="queryBuilder">queryBuilder to recieve the condition parameters.</param>
         void InsertTableData(string insertStatement, IQueryBuilder queryBuilder);
 
+        void BulkInsert<TModel>(DataTable dataTable);
+
         /// <summary>
         /// Updates data in the Database using the Update Query provided.
         /// </summary>
