@@ -193,49 +193,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
             }
         }
 
-        public Dictionary<string, ICollection<PrimaryKeyInfo>> BuildInsertConditions<TModel>(TModel model, int idOffset) where TModel : class, new()
-        {
-            try
-            {
-                StringBuilder stringBuilder = new(" (");
-
-                List<PropertyInfo> propertyInfos = typeof(TModel).GetProperties().ToList();
-
-                _primaryKeyInfos = _dataOperationHelper.RetrievePrimaryKeyInfo(typeof(TModel).Name);
-
-                //RemoveIdentityColumns(propertyInfos, idOffset);
-
-                for (int i = 0; i < propertyInfos.Count; i++)
-                {
-                    stringBuilder.Append($" {propertyInfos[i].Name}");
-
-                    if (i != propertyInfos.Count - 1)
-                        stringBuilder.Append(',');
-                    else
-                        stringBuilder.Append(") Values (");
-                }
-
-                for (int i = 0; i < propertyInfos.Count; i++)
-                {
-                    //GenerateInsertSqlParameter(propertyInfos[i], model, idOffset);
-
-                    stringBuilder.Append($" @{propertyInfos[i].Name}{_parameters.Count - 1}");
-
-                    if (i != propertyInfos.Count - 1)
-                        stringBuilder.Append(',');
-                }
-
-                stringBuilder.Append(')');
-
-                return new Dictionary<string, ICollection<PrimaryKeyInfo>> { { stringBuilder.ToString(), _primaryKeyInfos } };
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public DataTable BuildBulkInsert<TModel>(IEnumerable<TModel> models) where TModel : class, new()
+        public Dictionary<DataTable, IEnumerable<PrimaryKeyInfo>> BuildBulkInsert<TModel>(IEnumerable<TModel> models) where TModel : class, new()
         {
             DataTable dataTable = new();
 
@@ -243,14 +201,10 @@ namespace Business.DynamicModelReflector.QueryBuilders
 
             _primaryKeyInfos = _dataOperationHelper.RetrievePrimaryKeyInfo(typeof(TModel).Name);
 
-            RemoveIdentityColumns(propertyInfos);
-
             foreach (PropertyInfo prop in propertyInfos)
                 dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
 
-            GenerateDataTable(models, dataTable);
-
-            return dataTable;
+            return new Dictionary<DataTable, IEnumerable<PrimaryKeyInfo>> { { dataTable, GenerateDataTable(models, dataTable)} };
         }
 
         public List<SqlParameter> GetParameters() =>
@@ -351,9 +305,19 @@ namespace Business.DynamicModelReflector.QueryBuilders
         #endregion
 
         #region Private Methods
-        private void GenerateDataTable<TModel>(IEnumerable<TModel> models, DataTable dataTable) where TModel : class, new()
+        /// <summary>
+        /// Populates a given DataTable with the values from a collection of models.
+        /// </summary>
+        /// <param name="models">The collection of models to populate the DataTable.</param>
+        /// <param name="dataTable">The DataTable to be populated.</param>
+        /// <typeparam name="TModel">The type of the model, must be a class with a parameterless constructor.</typeparam>
+        /// <remarks>
+        /// This method iterates over each model, converting their properties into object arrays that are then added as rows to the DataTable. It manages identity columns and handles ID offsets for insertion.
+        /// </remarks>
+        private IEnumerable<PrimaryKeyInfo> GenerateDataTable<TModel>(IEnumerable<TModel> models, DataTable dataTable) where TModel : class, new()
         {
-            if (!ValidateIdentityColumns())
+            ICollection<PrimaryKeyInfo> insertedValues = new List<PrimaryKeyInfo>();
+            if(_primaryKeyInfos == null && _primaryKeyInfos.Where(primaryKeyInfo => primaryKeyInfo.IsIdentity == true || primaryKeyInfo.IsGuid == true).FirstOrDefault() == null)
                 FindInitialId<TModel>();
 
             int idOffset = 0;
@@ -361,42 +325,29 @@ namespace Business.DynamicModelReflector.QueryBuilders
             {
                 object[] values = new object[dataTable.Columns.Count];
                 for (int i = 0; i < dataTable.Columns.Count; i++)
+                {
+                    PrimaryKeyInfo primaryKeyInfo = _primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == dataTable.Columns[i].ColumnName);
                     values[i] = GenerateInsertValue(typeof(TModel).GetProperty(dataTable.Columns[i].ColumnName), model, idOffset);
+                    if (primaryKeyInfo != null)
+                        insertedValues.Add(new PrimaryKeyInfo() { InsertedValue = values[i], ColumnName = dataTable.Columns[i].ToString() });
+                }
 
                 dataTable.Rows.Add(values);
                 idOffset += 1;
             }
-        }
 
-        private void FindInitialId<TModel>() =>
-            _initialId = _dataOperationHelper.GenerateNextId(typeof(TModel).Name);
-
-        private bool ValidateIdentityColumns()
-        {
-            foreach(PrimaryKeyInfo primaryKeyInfo in _primaryKeyInfos)
-                if(primaryKeyInfo.IsIdentity)
-                    return true;
-
-            return false;
+            return insertedValues;
         }
 
         /// <summary>
-        /// Removes the Identity columns from the objects Property info.
+        /// Finds the initial ID for a model type.
         /// </summary>
-        /// <param name="propertyInfos">Objects property info.</param>
-        private void RemoveIdentityColumns(List<PropertyInfo> propertyInfos)
-        {
-            foreach (PrimaryKeyInfo primaryKeyInformation in _primaryKeyInfos)
-                if (primaryKeyInformation.IsIdentity)
-                {
-                    //if (primaryKeyInformation.InsertedValue is int currentValue)
-                    //    primaryKeyInformation.InsertedValue = currentValue + idOffset;
-
-                    PropertyInfo? propertyInfo = propertyInfos.FirstOrDefault(pi => pi.Name == primaryKeyInformation.ColumnName);
-                    if (propertyInfo != null)
-                        propertyInfos.Remove(propertyInfo);
-                }
-        }
+        /// <typeparam name="TModel">The type of the model for which the initial ID is to be found.</typeparam>
+        /// <remarks>
+        /// This method retrieves the next available ID for a given model type, using the DataOperationHelper. It's used in scenarios where identity columns need a starting ID.
+        /// </remarks>
+        private void FindInitialId<TModel>() =>
+            _initialId = _dataOperationHelper.GenerateNextId(typeof(TModel).Name);
 
         /// <summary>
         /// Retrieves the value of a specified variable from a given object using reflection.
@@ -443,12 +394,20 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// </summary>
         private object? DetermineValueForProperty<TModel>(PropertyInfo propertyInfo, TModel model, int idOffset) where TModel : class, new()
         {
-            if (_primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name) == null)
+            PrimaryKeyInfo primaryKeyInfo = _primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name);
+
+            if (primaryKeyInfo == null)
                 return HandleNullableTypes(propertyInfo, model);
 
-            object value = _initialId + idOffset;
+            object value = null;
 
-            _primaryKeyInfos.FirstOrDefault(pkInfo => pkInfo.ColumnName == propertyInfo.Name).InsertedValue = value;
+            if (!primaryKeyInfo.IsGuid || primaryKeyInfo.IsIdentity)
+            {
+                value = _initialId + idOffset;
+                return value;
+            }
+
+            value = Guid.NewGuid().ToString();
 
             return value;
         }

@@ -6,9 +6,11 @@
 
         public string ColumnName { get; set; }
 
-        public bool DataType { get; set; }
+        public string DataType { get; set; }
 
         public bool IsIdentity { get; set; }
+
+        public bool IsGuid { get; set; }
 
         public object InsertedValue { get; set; }
     }

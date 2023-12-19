@@ -69,14 +69,15 @@ namespace Business.DynamicModelReflector.Interfaces
         string BuildUpdateSetConditions<TModel>(TModel model) where TModel : class, new();
 
         /// <summary>
-        /// Builds Insert Conditions form the Poco Model Provided.
+        /// Creates a DataTable for bulk insertion of a collection of models.
         /// </summary>
-        /// <typeparam name="TModel">Generic POCO Model.</typeparam>
-        /// <param name="model">Poco Model Object.</param>
-        /// <param name="idOffset">Dictionary with the key being the insert query and the value being the ICollection of PrimaryKeyInfo.</param>
-        Dictionary<string, ICollection<PrimaryKeyInfo>> BuildInsertConditions<TModel>(TModel model, int idOffset) where TModel : class, new();
-
-        DataTable BuildBulkInsert<TModel>(IEnumerable<TModel> models) where TModel : class, new();
+        /// <param name="models">The collection of models to be inserted into the DataTable.</param>
+        /// <typeparam name="TModel">The type of the model, must be a class with a parameterless constructor.</typeparam>
+        /// <returns>A DataTable filled with the properties and values of the provided models.</returns>
+        /// <remarks>
+        /// This method builds a DataTable with columns corresponding to the properties of TModel. It uses reflection to retrieve property information and primary key details. The DataTable is populated by calling GenerateDataTable.
+        /// </remarks>
+        Dictionary<DataTable, IEnumerable<PrimaryKeyInfo>> BuildBulkInsert<TModel>(IEnumerable<TModel> models) where TModel : class, new();
 
         /// <summary>
         /// Build the GroupBy conditions.

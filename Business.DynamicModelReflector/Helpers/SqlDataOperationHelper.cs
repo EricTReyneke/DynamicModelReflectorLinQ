@@ -1,6 +1,7 @@
 ﻿using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.Models;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Security.Principal;
@@ -86,8 +87,9 @@ namespace Business.DynamicModelReflector.Helpers
                             {
                                 TableName = reader["TableName"].ToString(),
                                 ColumnName = reader["ColumnName"].ToString(),
-                                DataType = IsIntegerType(reader["DataType"].ToString()),
+                                DataType = reader["DataType"].ToString(),
                                 IsIdentity = isIdentity,
+                                IsGuid = IsGuid(reader["DataType"].ToString()),
                                 InsertedValue = isIdentity ? lastPrimaryKeyValue : null,
                             });
                         }
@@ -135,13 +137,13 @@ namespace Business.DynamicModelReflector.Helpers
         }
         
         /// <summary>
-        /// Validates if the datatype from the database is a type of int datatype.
+        /// Validates if the datatype from the database is a type of Guid.
         /// </summary>
         /// <param name="dataType">Database datatype.</param>
-        /// <returns>True if int, false if the datatype is not a int.</returns>
-        private bool IsIntegerType(string dataType)
+        /// <returns>True if Guid, false if the datatype is not a Guid.</returns>
+        private bool IsGuid(string dataType)
         {
-            HashSet<string> integerDataTypes = new() { "int", "smallint", "tinyint", "bigint" };
+            HashSet<string> integerDataTypes = new() { "uniqueidentifier" };
             return integerDataTypes.Contains(dataType.ToLower());
         }
         #endregion

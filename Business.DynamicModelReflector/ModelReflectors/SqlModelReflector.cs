@@ -3,6 +3,7 @@ using Business.DynamicModelReflector.Executables;
 using Business.DynamicModelReflector.Factories;
 using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.Models;
+using System.Data;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -110,13 +111,8 @@ namespace Business.DynamicModelReflector.ModelReflectors
         {
             try
             {
-                ClearParameterList();
-                StringBuilder buildLoadQuery = new();
-                KeyValuePair<string, ICollection<PrimaryKeyInfo>> insertQueryWithPrimaryKey = _queryBuilder.BuildInsertConditions(model, 0).FirstOrDefault();
-                buildLoadQuery.Append($"Insert Into {typeof(TModel).Name} {insertQueryWithPrimaryKey.Key}");
-                IContext<TModel> sqlContext = MapContext(buildLoadQuery, model);
-                sqlContext.PrimaryKeyCreationTracker = insertQueryWithPrimaryKey.Value;
-                return new SqlExecutable<TModel>(sqlContext);
+                List<TModel> models = new(){ model };
+                return Create((IEnumerable<TModel>)models);
             }
             catch (Exception ex)
             {
@@ -130,12 +126,13 @@ namespace Business.DynamicModelReflector.ModelReflectors
             try
             {
                 ClearParameterList();
-                StringBuilder buildLoadQuery = new StringBuilder();
                 ICollection<PrimaryKeyInfo> primaryKeyInfos = new List<PrimaryKeyInfo>();
 
-                IContext<TModel> sqlContext = MapContext(buildLoadQuery, models);
-                sqlContext.DataTable = _queryBuilder.BuildBulkInsert(models);
-                sqlContext.PrimaryKeyCreationTracker = primaryKeyInfos;
+                KeyValuePair<DataTable, IEnumerable<PrimaryKeyInfo>> insertDataTable = _queryBuilder.BuildBulkInsert(models).FirstOrDefault();
+
+                IContext<TModel> sqlContext = MapContext(null, models);
+                sqlContext.DataTable = insertDataTable.Key;
+                sqlContext.PrimaryKeyCreationTracker = (ICollection<PrimaryKeyInfo>)insertDataTable.Value;
                 return new SqlExecutable<TModel>(sqlContext);
             }
             catch (Exception ex)
