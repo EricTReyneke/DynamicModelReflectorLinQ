@@ -133,6 +133,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
                 IContext<TModel> sqlContext = MapContext(null, models);
                 sqlContext.DataTable = insertDataTable.Key;
                 sqlContext.PrimaryKeyCreationTracker = (ICollection<PrimaryKeyInfo>)insertDataTable.Value;
+                sqlContext.StringBuilder = new("Insert");
                 return new SqlExecutable<TModel>(sqlContext);
             }
             catch (Exception ex)

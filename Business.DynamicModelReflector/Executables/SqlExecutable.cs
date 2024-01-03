@@ -30,24 +30,23 @@ namespace Business.DynamicModelReflector.Executables
         #region Public Methods
         public ICollection<PrimaryKeyInfo> Execute()
         {
-            ExecuteInsertQuery();
-            //switch (_context.StringBuilder?.ToString().Split(' ')[0].ToLower())
-            //{
-            //    case "select":
-            //        ExecuteSelectQuery();
-            //        break;
-            //    case "delete":
-            //        _context.DataOperations.DeleteTableData(_context.StringBuilder.ToString(), _context.QueryBuilder);
-            //        break;
-            //    case "update":
-            //        _context.DataOperations.UpdateTableData(_context.StringBuilder.ToString(), _context.QueryBuilder);
-            //        break;
-            //    case "insert":
-            //        ExecuteInsertQuery();
-            //        break;
-            //    default:
-            //        throw new Exception($"The query: \"{_context.StringBuilder}\" is not supported.");
-            //}
+            switch (_context.StringBuilder?.ToString().Split(' ')[0].ToLower())
+            {
+                case "select":
+                    ExecuteSelectQuery();
+                    break;
+                case "delete":
+                    _context.DataOperations.DeleteTableData(_context.StringBuilder.ToString(), _context.QueryBuilder);
+                    break;
+                case "update":
+                    _context.DataOperations.UpdateTableData(_context.StringBuilder.ToString(), _context.QueryBuilder);
+                    break;
+                case "insert":
+                    ExecuteInsertQuery();
+                    break;
+                default:
+                    throw new Exception($"The query: \"{_context.StringBuilder}\" is not supported.");
+            }
 
             return _context.PrimaryKeyCreationTracker;
         }
@@ -72,26 +71,8 @@ namespace Business.DynamicModelReflector.Executables
         /// Validates what model to use and execute the query accordingly.
         /// </summary>
         /// <exception cref="Exception">The amount of queries do not corrosond to the number of Models.</exception>
-        private void ExecuteInsertQuery()
-        {
+        private void ExecuteInsertQuery() =>
             _context.DataOperations.BulkInsert<TModel>(_context.DataTable);
-
-            //if (_context.Models == null)
-            //{
-            //    _context.DataOperations.InsertTableData(_context.StringBuilder.ToString(), _context.QueryBuilder);
-            //    return;
-            //}
-
-            //string[] insertQueries = _context.StringBuilder.ToString().Split("\n");
-
-            //if (insertQueries.Length != _context.Models.Count())
-            //    throw new Exception("The amount of queries do not corrosond to the number of Models.");
-
-            //List<TModel> models = _context.Models as List<TModel> ?? _context.Models.ToList();
-
-            //for (int i = 0; i < models.Count; i++)
-            //    _context.DataOperations.InsertTableData(insertQueries[i], _context.QueryBuilder);
-        }
 
 
         /// <summary>
