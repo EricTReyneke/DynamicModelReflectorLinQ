@@ -202,7 +202,8 @@ namespace Business.DynamicModelReflector.QueryBuilders
             _primaryKeyInfos = _dataOperationHelper.RetrievePrimaryKeyInfo(typeof(TModel).Name);
 
             foreach (PropertyInfo prop in propertyInfos)
-                dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                if (prop.GetCustomAttribute(typeof(IgnoreDataMemberAttribute)) == null)
+                    dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
 
             return new Dictionary<DataTable, IEnumerable<PrimaryKeyInfo>> { { dataTable, GenerateDataTable(models, dataTable)} };
         }
