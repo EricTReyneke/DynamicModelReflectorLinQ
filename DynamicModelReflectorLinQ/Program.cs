@@ -14,11 +14,9 @@ namespace DynamicModelGeneratorLinq
         {
             IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder(new SqlDataOperationHelper()));
 
-            Players players = new Players();
 
-            IEnumerable<PrimaryKeyInfo> primaryKeyInfos = sqlModelReflector
-                                                                .Create(players)
-                                                                .Execute();
+            IEnumerable<Category> categories = new List<Category>();
+            sqlModelReflector.Load(categories).Where(category => category.TournamentId == Guid.Parse("727437D4-FDDA-4F81-B314-4F39959AA834")).Execute();
         }
     }
 }

@@ -126,6 +126,9 @@ namespace Business.DynamicModelReflector.Executables
             if (Nullable.GetUnderlyingType(propertyType) != null)
                 propertyType = Nullable.GetUnderlyingType(propertyType);
 
+            if(propertyType == typeof(Guid))
+                return Guid.Parse(propertyValue);
+
             return Convert.ChangeType(propertyValue, propertyType);
         }
 

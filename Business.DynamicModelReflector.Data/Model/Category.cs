@@ -1,11 +1,20 @@
-﻿namespace Business.DynamicModelReflector.Data.Model
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+
+namespace Business.DynamicModelReflector.Data.Model
 {
     public class Category
     {
-        public int Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
-        public int? Level { get; set; }
-        public int? NumberOfPlayers { get; set; }
-        public DateTime? Date { get; set; }
+
+        [ForeignKey("Tournament")]
+        public Guid TournamentId { get; set; }
+
+        [IgnoreDataMember]
+        public Tournament Tournament { get; set; }
     }
 }

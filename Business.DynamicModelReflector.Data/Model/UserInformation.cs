@@ -5,7 +5,7 @@ namespace Business.DynamicModelReflector.Data.Model
     public class UserInformation
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string FullName { get; set; }
 
