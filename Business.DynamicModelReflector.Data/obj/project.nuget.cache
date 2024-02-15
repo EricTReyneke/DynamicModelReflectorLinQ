@@ -1,8 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "J11DwUSVuP7fzu9ILiKQ0P9f1eZ5OxXLu/7veuoDWgBzN/bY4e7QmONZIDpAI1vZKtflnN0rx/lvRQaZMHKSqA==",
+  "dgSpecHash": "N1/7t9tuRWgx4uRJT1+3dYmtw0aQ4H8OfkJtl9MBcqAWUpY6NUbbMtuPLdiyJcB+Wvpj5WpPAK/gBT+BT7FE8g==",
   "success": true,
-  "projectFilePath": "C:\\DynamicDataModelReflector\\Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\DynamicModelReflector\\Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\eric2\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\runtime.win-x86.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\system.data.sqlclient\\4.8.6\\system.data.sqlclient.4.8.6.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512"
+  ],
   "logs": []
 }

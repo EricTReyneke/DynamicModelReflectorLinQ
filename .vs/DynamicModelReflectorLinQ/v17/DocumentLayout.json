@@ -1,0 +1,121 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\DynamicModelReflector\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{679213EA-FADE-4704-8BB9-056E198219AD}|Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj|c:\\dynamicmodelreflector\\business.dynamicmodelreflector\\querybuilders\\sqlquerybuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{679213EA-FADE-4704-8BB9-056E198219AD}|Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj|solutionrelative:business.dynamicmodelreflector\\querybuilders\\sqlquerybuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{29C5E728-EA73-4D5D-B2F1-448E37751FEB}|DynamicModelReflectorLinQ\\DynamicModelReflectorLinQ.csproj|c:\\dynamicmodelreflector\\dynamicmodelreflectorlinq\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{29C5E728-EA73-4D5D-B2F1-448E37751FEB}|DynamicModelReflectorLinQ\\DynamicModelReflectorLinQ.csproj|solutionrelative:dynamicmodelreflectorlinq\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{679213EA-FADE-4704-8BB9-056E198219AD}|Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj|c:\\dynamicmodelreflector\\business.dynamicmodelreflector\\dataoperations\\sqldataoperations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{679213EA-FADE-4704-8BB9-056E198219AD}|Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj|solutionrelative:business.dynamicmodelreflector\\dataoperations\\sqldataoperations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{679213EA-FADE-4704-8BB9-056E198219AD}|Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj|c:\\dynamicmodelreflector\\business.dynamicmodelreflector\\executables\\sqlexecutable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{679213EA-FADE-4704-8BB9-056E198219AD}|Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj|solutionrelative:business.dynamicmodelreflector\\executables\\sqlexecutable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FAE32722-4A39-4110-A1C3-9780A7D827E5}|Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj|c:\\dynamicmodelreflector\\business.dynamicmodelreflector.data\\model\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FAE32722-4A39-4110-A1C3-9780A7D827E5}|Business.DynamicModelReflector.Data\\Business.DynamicModelReflector.Data.csproj|solutionrelative:business.dynamicmodelreflector.data\\model\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SqlQueryBuilder.cs",
+              "DocumentMoniker": "C:\\DynamicModelReflector\\Business.DynamicModelReflector\\QueryBuilders\\SqlQueryBuilder.cs",
+              "RelativeDocumentMoniker": "Business.DynamicModelReflector\\QueryBuilders\\SqlQueryBuilder.cs",
+              "ToolTip": "C:\\DynamicModelReflector\\Business.DynamicModelReflector\\QueryBuilders\\SqlQueryBuilder.cs",
+              "RelativeToolTip": "Business.DynamicModelReflector\\QueryBuilders\\SqlQueryBuilder.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAANQAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-15T22:05:04.124Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SqlDataOperations.cs",
+              "DocumentMoniker": "C:\\DynamicModelReflector\\Business.DynamicModelReflector\\DataOperations\\SqlDataOperations.cs",
+              "RelativeDocumentMoniker": "Business.DynamicModelReflector\\DataOperations\\SqlDataOperations.cs",
+              "ToolTip": "C:\\DynamicModelReflector\\Business.DynamicModelReflector\\DataOperations\\SqlDataOperations.cs",
+              "RelativeToolTip": "Business.DynamicModelReflector\\DataOperations\\SqlDataOperations.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAQwCcAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-15T22:05:04.16Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Category.cs",
+              "DocumentMoniker": "C:\\DynamicModelReflector\\Business.DynamicModelReflector.Data\\Model\\Category.cs",
+              "RelativeDocumentMoniker": "Business.DynamicModelReflector.Data\\Model\\Category.cs",
+              "ToolTip": "C:\\DynamicModelReflector\\Business.DynamicModelReflector.Data\\Model\\Category.cs",
+              "RelativeToolTip": "Business.DynamicModelReflector.Data\\Model\\Category.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-15T22:05:04.167Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SqlExecutable.cs",
+              "DocumentMoniker": "C:\\DynamicModelReflector\\Business.DynamicModelReflector\\Executables\\SqlExecutable.cs",
+              "RelativeDocumentMoniker": "Business.DynamicModelReflector\\Executables\\SqlExecutable.cs",
+              "ToolTip": "C:\\DynamicModelReflector\\Business.DynamicModelReflector\\Executables\\SqlExecutable.cs",
+              "RelativeToolTip": "Business.DynamicModelReflector\\Executables\\SqlExecutable.cs",
+              "ViewState": "AQIAADYAAAAAAAAAAADgvzYAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-15T22:05:04.171Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\DynamicModelReflector\\DynamicModelReflectorLinQ\\Program.cs",
+              "RelativeDocumentMoniker": "DynamicModelReflectorLinQ\\Program.cs",
+              "ToolTip": "C:\\DynamicModelReflector\\DynamicModelReflectorLinQ\\Program.cs",
+              "RelativeToolTip": "DynamicModelReflectorLinQ\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-15T22:05:04.176Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
