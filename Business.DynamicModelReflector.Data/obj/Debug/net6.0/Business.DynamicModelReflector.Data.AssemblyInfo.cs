@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Business.DynamicModelReflector.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+523454572ed7bb9a5d0a5f84087b984d83601cf4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Business.DynamicModelReflector.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Business.DynamicModelReflector.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -205,7 +205,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
                 if (prop.GetCustomAttribute(typeof(IgnoreDataMemberAttribute)) == null)
                     dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
 
-            return new Dictionary<DataTable, IEnumerable<PrimaryKeyInfo>> { { dataTable, GenerateDataTable(models, dataTable)} };
+            return new Dictionary<DataTable, IEnumerable<PrimaryKeyInfo>> { { dataTable, GenerateDataTable(models, dataTable) } };
         }
 
         public List<SqlParameter> GetParameters() =>
@@ -318,7 +318,7 @@ namespace Business.DynamicModelReflector.QueryBuilders
         private IEnumerable<PrimaryKeyInfo> GenerateDataTable<TModel>(IEnumerable<TModel> models, DataTable dataTable) where TModel : class, new()
         {
             ICollection<PrimaryKeyInfo> insertedValues = new List<PrimaryKeyInfo>();
-            if(_primaryKeyInfos == null && _primaryKeyInfos.Where(primaryKeyInfo => primaryKeyInfo.IsIdentity == true || primaryKeyInfo.IsGuid == true).FirstOrDefault() == null)
+            if (_primaryKeyInfos == null && _primaryKeyInfos.Where(primaryKeyInfo => primaryKeyInfo.IsIdentity == true || primaryKeyInfo.IsGuid == true).FirstOrDefault() == null)
                 FindInitialId<TModel>();
 
             int idOffset = 0;

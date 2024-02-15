@@ -31,3 +31,16 @@ C:\DynamicDataModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.
 C:\DynamicDataModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\refint\Business.DynamicModelReflector.Data.dll
 C:\DynamicDataModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
 C:\DynamicDataModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\ref\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\bin\Debug\net6.0\Business.DynamicModelReflector.Data.deps.json
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\bin\Debug\net6.0\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\bin\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.csproj.AssemblyReference.cache
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.AssemblyInfoInputs.cache
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.AssemblyInfo.cs
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.csproj.CoreCompileInputs.cache
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.sourcelink.json
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\refint\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\ref\Business.DynamicModelReflector.Data.dll

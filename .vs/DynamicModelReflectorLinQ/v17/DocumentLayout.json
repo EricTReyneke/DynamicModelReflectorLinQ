@@ -56,7 +56,7 @@
               "RelativeDocumentMoniker": "Business.DynamicModelReflector\\QueryBuilders\\SqlQueryBuilder.cs",
               "ToolTip": "C:\\DynamicModelReflector\\Business.DynamicModelReflector\\QueryBuilders\\SqlQueryBuilder.cs",
               "RelativeToolTip": "Business.DynamicModelReflector\\QueryBuilders\\SqlQueryBuilder.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAANQAAAASAAAA",
+              "ViewState": "AQIAAOwBAAAAAAAAAADwvwsCAABqAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-15T22:05:04.124Z",
               "EditorCaption": ""
@@ -71,8 +71,7 @@
               "RelativeToolTip": "Business.DynamicModelReflector\\DataOperations\\SqlDataOperations.cs",
               "ViewState": "AQIAAAwAAAAAAAAAAAAQwCcAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-15T22:05:04.16Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-15T22:05:04.16Z"
             },
             {
               "$type": "Document",
@@ -84,8 +83,7 @@
               "RelativeToolTip": "Business.DynamicModelReflector.Data\\Model\\Category.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-15T22:05:04.167Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-15T22:05:04.167Z"
             },
             {
               "$type": "Document",
@@ -97,8 +95,7 @@
               "RelativeToolTip": "Business.DynamicModelReflector\\Executables\\SqlExecutable.cs",
               "ViewState": "AQIAADYAAAAAAAAAAADgvzYAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-15T22:05:04.171Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-15T22:05:04.171Z"
             },
             {
               "$type": "Document",
@@ -110,8 +107,7 @@
               "RelativeToolTip": "DynamicModelReflectorLinQ\\Program.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-15T22:05:04.176Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-15T22:05:04.176Z"
             }
           ]
         }
