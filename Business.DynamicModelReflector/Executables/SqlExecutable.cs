@@ -85,7 +85,7 @@ namespace Business.DynamicModelReflector.Executables
             if (tableData.Rows.Count == 0) return;
 
             IEnumerable<PropertyInfo> properties = typeof(TModel).GetProperties()
-                .Where(p => p.CanWrite && tableData.Columns.Contains(p.Name))
+                .Where(PropertyInfo => PropertyInfo.CanWrite && tableData.Columns.Contains(PropertyInfo.Name))
                 .ToList();
 
             Parallel.ForEach(properties, propertyInfo =>
@@ -131,10 +131,6 @@ namespace Business.DynamicModelReflector.Executables
 
             return Convert.ChangeType(propertyValue, propertyType);
         }
-
-        private IEnumerable<PropertyInfo> GetIgnoredProperties() =>
-            typeof(TModel).GetProperties()
-                .Where(p => p.GetCustomAttributes(typeof(IgnoreDataMemberAttribute), false).Any());
         #endregion
     }
 }

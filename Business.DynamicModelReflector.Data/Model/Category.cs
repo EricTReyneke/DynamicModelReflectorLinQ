@@ -11,9 +11,6 @@ namespace Business.DynamicModelReflector.Data.Model
 
         public string Name { get; set; }
 
-        [ForeignKey("Tournament")]
-        public Guid TournamentId { get; set; }
-
         [IgnoreDataMember]
         public Tournament Tournament { get; set; }
     }

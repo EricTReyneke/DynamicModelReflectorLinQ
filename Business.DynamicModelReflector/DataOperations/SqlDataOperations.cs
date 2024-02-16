@@ -3,8 +3,6 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.Extensions.Configuration;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace Business.DynamicModelReflector.DataOperations
 {

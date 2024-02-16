@@ -53,9 +53,8 @@ C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\Busines
 C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\Business.DynamicModelReflector.AssemblyInfoInputs.cache
 C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\Business.DynamicModelReflector.AssemblyInfo.cs
 C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\Business.DynamicModelReflector.csproj.CoreCompileInputs.cache
-C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\Business.DynamicModelReflector.sourcelink.json
-C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\Business.2787A1E9.Up2Date
 C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\Business.DynamicModelReflector.dll
 C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\refint\Business.DynamicModelReflector.dll
 C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\Business.DynamicModelReflector.pdb
 C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\ref\Business.DynamicModelReflector.dll
+C:\DynamicModelReflector\Business.DynamicModelReflector\obj\Debug\net6.0\Business.DynamicModelReflector.csproj.CopyComplete

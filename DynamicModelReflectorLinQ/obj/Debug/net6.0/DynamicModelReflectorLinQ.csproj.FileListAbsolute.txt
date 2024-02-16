@@ -140,10 +140,9 @@ C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModel
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.AssemblyInfoInputs.cache
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.AssemblyInfo.cs
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.CoreCompileInputs.cache
-C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.sourcelink.json
-C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicM.A5AC3E27.Up2Date
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.dll
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\refint\DynamicModelReflectorLinQ.dll
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.pdb
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.genruntimeconfig.cache
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\ref\DynamicModelReflectorLinQ.dll
+C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.CopyComplete

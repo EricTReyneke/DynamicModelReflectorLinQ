@@ -1,6 +1,7 @@
 ﻿using Business.DynamicModelReflector.Enums;
 using Business.DynamicModelReflector.Interfaces;
 using Business.DynamicModelReflector.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Data.SqlClient;
@@ -520,13 +521,15 @@ namespace Business.DynamicModelReflector.QueryBuilders
         {
             try
             {
-                string foreignKeyName = RetirevesTheForeignKeyColumnName(joinCondition);
-                string? relationshipTableName = RetrieveForeignKeyTableName(foreignKeyName, new TModel());
+                string[] expressionStringArr = RetirevesTheForeignKeyColumnName(joinCondition).Split(')')[0].Split('.');
+                string foreignKeyName = expressionStringArr.Last();
+                string relationshipTableName = expressionStringArr[^2];
+                string primaryKey = RetrievesPrimaryKey<TModel>();
 
                 if (relationshipTableName == null)
                     throw new Exception("Join property is not a forgein key.");
 
-                return $"{AddAllForeignKeyTableColumns(relationshipTableName, new TModel())} \nFrom {typeof(TModel).Name} \n{joinType} Join {relationshipTableName} On {typeof(TModel).Name}.{foreignKeyName} = {relationshipTableName}.{foreignKeyName}";
+                return $"{AddAllForeignKeyTableColumns(relationshipTableName, new TModel())} \nFrom {typeof(TModel).Name} \n{joinType} Join {relationshipTableName} On {typeof(TModel).Name}.{primaryKey} = {relationshipTableName}.{foreignKeyName}";
             }
             catch
             {
@@ -546,20 +549,18 @@ namespace Business.DynamicModelReflector.QueryBuilders
         private string RetirevesTheForeignKeyColumnName<TModel>(Expression<Func<TModel, object>> joinCondition)
             where TModel : class, new() =>
                 joinCondition.Body is UnaryExpression unary && unary.NodeType == ExpressionType.Convert ?
-                    unary.Operand.ToString().Split('.').Last()
+                    unary.Operand.ToString()
                         : throw new Exception("Expression is in the wrong format.");
 
         /// <summary>
-        /// Retrieves the Forgein table name from the Forgein keys attribute in the POCO Model.
+        /// Retrieves the name of the property marked with the [Key] attribute in the specified model.
         /// </summary>
-        /// <typeparam name="TModel">Generic POCO</typeparam>
-        /// <param name="foreignKeyName">Forgein key column/property name.</param>
-        /// <param name="model">POCO object.</param>
-        /// <returns>Forgein table name from the Forgein key property attribute.</returns>
-        private string? RetrieveForeignKeyTableName<TModel>(string foreignKeyName, TModel model)
-            where TModel : class, new() =>
-                (model.GetType().GetProperty(foreignKeyName)
-                    ?.GetCustomAttribute<ForeignKeyAttribute>() as ForeignKeyAttribute)?.Name;
+        /// <typeparam name="TModel">The type of the model to inspect, which must be a class.</typeparam>
+        /// <returns>The name of the key property if found; otherwise, null. The method assumes there is at most one [Key] attribute in the model.</returns>
+        /// <remarks>This method uses reflection to inspect the model's properties for the [Key] attribute. It's designed to be used with POCO entities in scenarios such as ORM mapping where entities are marked with data annotations.</remarks>
+        public static string RetrievesPrimaryKey<TModel>() where TModel : class =>
+            typeof(TModel).GetProperties()
+                .FirstOrDefault(p => p.GetCustomAttribute<KeyAttribute>() != null)?.Name;
         #endregion
     }
 }
