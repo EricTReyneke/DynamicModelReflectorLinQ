@@ -19,6 +19,8 @@ namespace Business.DynamicModelReflector.Context
 
         public ICollection<PrimaryKeyInfo> PrimaryKeyCreationTracker { get; set; } = new List<PrimaryKeyInfo>();
 
+        public ICollection<string> JoinedTables { get; set; } = new List<string>();
+
         public DataTable DataTable { get; set; }
     }
 }

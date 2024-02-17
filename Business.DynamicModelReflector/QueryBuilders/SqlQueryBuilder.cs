@@ -103,13 +103,13 @@ namespace Business.DynamicModelReflector.QueryBuilders
             }
         }
 
-        public string BuildLeftJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
+        public KeyValuePair<string, string> BuildLeftJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
             BuildJoinConditions("Left", joinCondition);
 
-        public string BuildRightJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
+        public KeyValuePair<string, string> BuildRightJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
             BuildJoinConditions("Right", joinCondition);
 
-        public string BuildInnerJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
+        public KeyValuePair<string, string> BuildInnerJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new() =>
             BuildJoinConditions("Inner", joinCondition);
 
         public void BuildGroupByConditions<TModel>(StringBuilder queryStatment, params (Expression<Func<TModel, object>> groupByProperty, SqlAggregateFunctionMenu aggregateFunctionMenu)[] groupByCondition) where TModel : class, new()
@@ -515,9 +515,9 @@ namespace Business.DynamicModelReflector.QueryBuilders
         /// <typeparam name="TModel">Generic POCO</typeparam>
         /// <param name="joinType">The type of join statment.</param>
         /// <param name="joinCondition">Join Expression.</param>
-        /// <returns>String of the Join conditions.</returns>
+        /// <returns>KeyValuePair of the Joined table name and the Query.</returns>
         /// <exception cref="Exception">Throws Exeption when the Expression is not in the correct format.</exception>
-        private string BuildJoinConditions<TModel>(string joinType, Expression<Func<TModel, object>> joinCondition) where TModel : class, new()
+        private KeyValuePair<string, string> BuildJoinConditions<TModel>(string joinType, Expression<Func<TModel, object>> joinCondition) where TModel : class, new()
         {
             try
             {
@@ -529,7 +529,10 @@ namespace Business.DynamicModelReflector.QueryBuilders
                 if (relationshipTableName == null)
                     throw new Exception("Join property is not a forgein key.");
 
-                return $"{AddAllForeignKeyTableColumns(relationshipTableName, new TModel())} \nFrom {typeof(TModel).Name} \n{joinType} Join {relationshipTableName} On {typeof(TModel).Name}.{primaryKey} = {relationshipTableName}.{foreignKeyName}";
+                return new KeyValuePair<string, string>(
+                    relationshipTableName, 
+                    $"{AddAllForeignKeyTableColumns(relationshipTableName, new TModel())} \nFrom {typeof(TModel).Name} \n{joinType} Join {relationshipTableName} On {typeof(TModel).Name}.{primaryKey} = {relationshipTableName}.{foreignKeyName}");
+
             }
             catch
             {

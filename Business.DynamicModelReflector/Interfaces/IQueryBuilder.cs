@@ -36,24 +36,24 @@ namespace Business.DynamicModelReflector.Interfaces
         /// </summary>
         /// <typeparam name="TModel">Generic POCO</typeparam>
         /// <param name="joinCondition">Join Expression</param>
-        /// <returns>String of the Left Join Conditions.</returns>
-        string BuildLeftJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new();
+        /// <returns>KeyValuePair of the Joined table name and the Left Join Query.</returns>
+        KeyValuePair<string, string> BuildLeftJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new();
 
         /// <summary>
         /// Builds the Right Join query conditions.
         /// </summary>
         /// <typeparam name="TModel">Generic POCO</typeparam>
         /// <param name="joinCondition">Join Expression</param>
-        /// <returns>String of the Right Join Conditions.</returns>
-        string BuildRightJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new();
+        /// <returns>KeyValuePair of the Joined table name and the Right Join Query.</returns>
+        KeyValuePair<string, string> BuildRightJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new();
 
         /// <summary>
         /// Builds the Inner Join query conditions.
         /// </summary>
         /// <typeparam name="TModel">Generic POCO</typeparam>
         /// <param name="joinCondition">Join Expression</param>
-        /// <returns>String of the Inner Join Conditions.</returns>
-        string BuildInnerJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new();
+        /// <returns>KeyValuePair of the Joined table name and the Inner Join Query.</returns>
+        KeyValuePair<string, string> BuildInnerJoinConditions<TModel>(Expression<Func<TModel, object>> joinCondition) where TModel : class, new();
 
         /// <summary>
         /// Returns the Parameters added to the Query.

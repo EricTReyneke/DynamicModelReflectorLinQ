@@ -29,7 +29,7 @@ namespace Business.DynamicModelReflector.Conditions
             try
             {
                 PrepareJoinCondition();
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildLeftJoinConditions(joinCondition));
+                _context.StringBuilder.Append(AddJoinTableToContext(_context.QueryBuilder.BuildLeftJoinConditions(joinCondition)));
             }
             catch
             {
@@ -42,7 +42,7 @@ namespace Business.DynamicModelReflector.Conditions
             try
             {
                 PrepareJoinCondition();
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildRightJoinConditions(joinCondition));
+                _context.StringBuilder.Append(AddJoinTableToContext(_context.QueryBuilder.BuildRightJoinConditions(joinCondition)));
             }
             catch
             {
@@ -55,7 +55,7 @@ namespace Business.DynamicModelReflector.Conditions
             try
             {
                 PrepareJoinCondition();
-                _context.StringBuilder.Append(_context.QueryBuilder.BuildInnerJoinConditions(joinCondition));
+                _context.StringBuilder.Append(AddJoinTableToContext(_context.QueryBuilder.BuildInnerJoinConditions(joinCondition)));
             }
             catch
             {
@@ -72,6 +72,17 @@ namespace Business.DynamicModelReflector.Conditions
         {
             string selectedColumns = _context.StringBuilder.ToString().Split(" \nFrom")[0];
             _context.StringBuilder.Clear().Append($"{selectedColumns},");
+        }
+
+        /// <summary>
+        /// Addes the Joined table to the JoinedTables ICollection Property in the IContext and returns the Query.
+        /// </summary>
+        /// <param name="joinContext">Stores the JoinedTable in the Key and the Query in the Value of the KeyValuePairs.</param>
+        /// <returns>Join Query String.</returns>
+        private string AddJoinTableToContext(KeyValuePair<string, string> joinContext)
+        {
+            _context.JoinedTables.Add(joinContext.Key);
+            return joinContext.Value;
         }
         #endregion
     }

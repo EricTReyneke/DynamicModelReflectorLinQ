@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Data;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 
 namespace Business.DynamicModelReflector.Executables
 {
@@ -84,12 +85,13 @@ namespace Business.DynamicModelReflector.Executables
         {
             if (tableData.Rows.Count == 0) return;
 
-            IEnumerable<PropertyInfo> properties = typeof(TModel).GetProperties()
-                .Where(PropertyInfo => PropertyInfo.CanWrite && tableData.Columns.Contains(PropertyInfo.Name))
-                .ToList();
-
-            Parallel.ForEach(properties, propertyInfo =>
+            Parallel.ForEach(typeof(TModel).GetProperties(), propertyInfo =>
             {
+                //if(!tableData.Columns.Contains(propertyInfo.Name))
+                //{
+
+                //}
+
                 object value = tableData.Rows[0][propertyInfo.Name];
 
                 if (value == DBNull.Value)
@@ -131,6 +133,19 @@ namespace Business.DynamicModelReflector.Executables
 
             return Convert.ChangeType(propertyValue, propertyType);
         }
+
+        private void MapForgeinKeyTable(DataTable tableData, TModel setDataModel)
+        {
+
+        }
+
+        /// <summary>
+        /// Trims the end of a string and removes any Numbers.
+        /// </summary>
+        /// <param name="stringToTrim">String to trim.</param>
+        /// <returns>Returns a string with a trimed value.</returns>
+        public static string RemoveTrailingNumbers(string stringToTrim) =>
+            Regex.Replace(stringToTrim, @"\d+$", "");
         #endregion
     }
 }

@@ -36,6 +36,14 @@ namespace Business.DynamicModelReflector.Interfaces
         /// </summary>
         ICollection<PrimaryKeyInfo> PrimaryKeyCreationTracker { get; set; }
 
+        /// <summary>
+        /// Stores the names of the Joined tables.
+        /// </summary>
+        ICollection<string> JoinedTables { get; set; }
+
+        /// <summary>
+        /// Stores the data for the Bulk Insert.
+        /// </summary>
         DataTable DataTable { get; set; }
     }
 }
