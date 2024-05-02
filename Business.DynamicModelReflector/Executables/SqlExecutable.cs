@@ -87,11 +87,6 @@ namespace Business.DynamicModelReflector.Executables
 
             Parallel.ForEach(typeof(TModel).GetProperties(), propertyInfo =>
             {
-                //if(!tableData.Columns.Contains(propertyInfo.Name))
-                //{
-
-                //}
-
                 object value = tableData.Rows[0][propertyInfo.Name];
 
                 if (value == DBNull.Value)

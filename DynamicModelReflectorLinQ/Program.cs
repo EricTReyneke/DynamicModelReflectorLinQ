@@ -13,11 +13,9 @@ namespace DynamicModelGeneratorLinq
         {
             IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder(new SqlDataOperationHelper()));
 
-
             Category categories = new();
             sqlModelReflector
                 .Load(categories)
-                .InnerJoin(categories => categories.Id == categories.Tournament.Id)
                 .Execute();
         }
     }
