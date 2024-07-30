@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "twplpXomcxwb9VpoxceCK2GXK9HzBNbIPN86hvte3uX2NOWOgVzOrAzuj0k8XBFpmC3Svx9s3OPgKheZJkQyhg==",
+  "success": true,
+  "projectFilePath": "C:\\DynamicModelReflector\\Business.DynamicModelReflector.DIContainer\\Business.DynamicModelReflector.DIContainer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\eric2\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.0\\microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

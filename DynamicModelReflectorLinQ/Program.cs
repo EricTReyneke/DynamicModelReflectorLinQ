@@ -14,6 +14,8 @@ namespace DynamicModelGeneratorLinq
             IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder(new SqlDataOperationHelper()));
 
             Category categories = new();
+
+
             sqlModelReflector
                 .Load(categories)
                 .Execute();

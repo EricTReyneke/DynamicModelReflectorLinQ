@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "dcAx8qTH53d5FT+/O6+zUzq6/q8HRarpbSoO/C/2ORWLcvWfTPg4IlvYvQNxW1TOcLRbIVBKc/hmCb2DceEd2Q==",
+  "dgSpecHash": "Fn6hDXEMKUY=",
   "success": true,
   "projectFilePath": "C:\\DynamicModelReflector\\Business.DynamicModelReflector\\Business.DynamicModelReflector.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\eric2\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.0\\microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "C:\\Users\\eric2\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\eric2\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\eric2\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\eric2\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",

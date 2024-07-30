@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DynamicModelReflectorLinQ")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7cbd67f58b72ac70263aa714cae21f192b56cd42")]
 [assembly: System.Reflection.AssemblyProductAttribute("DynamicModelReflectorLinQ")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DynamicModelReflectorLinQ")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

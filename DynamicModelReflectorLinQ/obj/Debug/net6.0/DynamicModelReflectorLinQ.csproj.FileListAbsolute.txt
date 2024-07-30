@@ -146,3 +146,5 @@ C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModel
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.genruntimeconfig.cache
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\ref\DynamicModelReflectorLinQ.dll
 C:\DynamicModelReflector\DynamicModelReflectorLinQ\obj\Debug\net6.0\DynamicModelReflectorLinQ.csproj.CopyComplete
+C:\DynamicModelReflector\DynamicModelReflectorLinQ\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
+C:\DynamicModelReflector\DynamicModelReflectorLinQ\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
