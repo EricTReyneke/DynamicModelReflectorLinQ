@@ -11,14 +11,35 @@ namespace DynamicModelGeneratorLinq
     {
         public static void Main(string[] args)
         {
-            IModelReflector sqlModelReflector = new SqlModelReflector(new SqlDataOperations(), new SqlQueryBuilder(new SqlDataOperationHelper()));
+            IModelReflector redisModelReflector = new RedisModelReflector(new RedisDataOperations());
 
-            Category categories = new();
+            IEnumerable<Lekker> lekker = new List<Lekker>()
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Lekker1 = "Lekker1"
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Lekker1 = "Lekker2"
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Lekker1 = "Lekker3"
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Lekker1 = "Lekker4"
+                }
+            };
 
+            redisModelReflector.Create(lekker);
 
-            sqlModelReflector
-                .Load(categories)
-                .Execute();
+            redisModelReflector.Load(lekker);
         }
     }
 }

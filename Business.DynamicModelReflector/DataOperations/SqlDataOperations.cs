@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Business.DynamicModelReflector.DataOperations
 {
-    public class SqlDataOperations : IDataOperations
+    public class SqlDataOperations : IQueryDataOperations
     {
         #region Fields
         /// <summary>

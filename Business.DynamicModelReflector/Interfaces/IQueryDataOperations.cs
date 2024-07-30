@@ -2,7 +2,7 @@
 
 namespace Business.DynamicModelReflector.Interfaces
 {
-    public interface IDataOperations
+    public interface IQueryDataOperations
     {
         /// <summary>
         /// Retrieves Data from the Database with the Query Provided.

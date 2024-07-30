@@ -43,3 +43,4 @@ C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Bu
 C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\refint\Business.DynamicModelReflector.Data.dll
 C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.pdb
 C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\ref\Business.DynamicModelReflector.Data.dll
+C:\DynamicModelReflector\Business.DynamicModelReflector.Data\obj\Debug\net6.0\Business.DynamicModelReflector.Data.sourcelink.json

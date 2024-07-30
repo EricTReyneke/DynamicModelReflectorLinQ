@@ -11,7 +11,7 @@ namespace Business.DynamicModelReflector.Context
 
         public StringBuilder StringBuilder { get; set; }
 
-        public IDataOperations DataOperations { get; set; }
+        public IQueryDataOperations DataOperations { get; set; }
 
         public TModel Model { get; set; }
 

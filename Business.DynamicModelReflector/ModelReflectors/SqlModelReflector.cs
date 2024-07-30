@@ -16,7 +16,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         /// <summary>
         /// Specific Database Operations.
         /// </summary>
-        IDataOperations _dataOperations;
+        IQueryDataOperations _dataOperations;
 
         /// <summary>
         /// Database specified Query Builder.
@@ -30,7 +30,7 @@ namespace Business.DynamicModelReflector.ModelReflectors
         /// </summary>
         /// <param name="dataOperations">Specific Database Operations.</param>
         /// <param name="queryBuilder">Database specified Query Builder.</param>
-        public SqlModelReflector(IDataOperations dataOperations, IQueryBuilder queryBuilder)
+        public SqlModelReflector(IQueryDataOperations dataOperations, IQueryBuilder queryBuilder)
         {
             _dataOperations = dataOperations;
             _queryBuilder = queryBuilder;

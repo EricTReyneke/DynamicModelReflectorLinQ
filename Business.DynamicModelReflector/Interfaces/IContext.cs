@@ -19,7 +19,7 @@ namespace Business.DynamicModelReflector.Interfaces
         /// <summary>
         /// Database Operations.
         /// </summary>
-        IDataOperations DataOperations { get; set; }
+        IQueryDataOperations DataOperations { get; set; }
 
         /// <summary>
         /// Poco Model Object.
